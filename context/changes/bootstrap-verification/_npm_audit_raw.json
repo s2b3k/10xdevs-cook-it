@@ -1,0 +1,248 @@
+﻿{
+  "auditReportVersion": 2,
+  "vulnerabilities": {
+    "@astrojs/check": {
+      "name": "@astrojs/check",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "@astrojs/language-server"
+      ],
+      "effects": [],
+      "range": ">=0.9.3",
+      "nodes": [
+        "node_modules/@astrojs/check"
+      ],
+      "fixAvailable": {
+        "name": "@astrojs/check",
+        "version": "0.9.2",
+        "isSemVerMajor": true
+      }
+    },
+    "@astrojs/language-server": {
+      "name": "@astrojs/language-server",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "volar-service-yaml"
+      ],
+      "effects": [
+        "@astrojs/check"
+      ],
+      "range": ">=2.14.0",
+      "nodes": [
+        "node_modules/@astrojs/language-server"
+      ],
+      "fixAvailable": {
+        "name": "@astrojs/check",
+        "version": "0.9.2",
+        "isSemVerMajor": true
+      }
+    },
+    "@cloudflare/vite-plugin": {
+      "name": "@cloudflare/vite-plugin",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "miniflare",
+        "wrangler",
+        "ws"
+      ],
+      "effects": [],
+      "range": "<=0.0.0-fff677e35 || 0.0.7 - 1.37.2",
+      "nodes": [
+        "node_modules/@cloudflare/vite-plugin"
+      ],
+      "fixAvailable": true
+    },
+    "devalue": {
+      "name": "devalue",
+      "severity": "high",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1119005,
+          "name": "devalue",
+          "dependency": "devalue",
+          "title": "Svelte devalue: DoS via sparse array deserialization",
+          "url": "https://github.com/advisories/GHSA-77vg-94rm-hx3p",
+          "severity": "high",
+          "cwe": [
+            "CWE-770"
+          ],
+          "cvss": {
+            "score": 7.5,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+          },
+          "range": ">=5.6.3 <=5.8.0"
+        }
+      ],
+      "effects": [],
+      "range": "5.6.3 - 5.8.0",
+      "nodes": [
+        "node_modules/devalue"
+      ],
+      "fixAvailable": true
+    },
+    "miniflare": {
+      "name": "miniflare",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "ws"
+      ],
+      "effects": [
+        "@cloudflare/vite-plugin",
+        "wrangler"
+      ],
+      "range": "<=0.0.0-fff677e35 || 3.20250204.0 - 4.20260518.0",
+      "nodes": [
+        "node_modules/miniflare"
+      ],
+      "fixAvailable": true
+    },
+    "volar-service-yaml": {
+      "name": "volar-service-yaml",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "yaml-language-server"
+      ],
+      "effects": [
+        "@astrojs/language-server"
+      ],
+      "range": "<=0.0.70",
+      "nodes": [
+        "node_modules/volar-service-yaml"
+      ],
+      "fixAvailable": {
+        "name": "@astrojs/check",
+        "version": "0.9.2",
+        "isSemVerMajor": true
+      }
+    },
+    "wrangler": {
+      "name": "wrangler",
+      "severity": "moderate",
+      "isDirect": true,
+      "via": [
+        "miniflare"
+      ],
+      "effects": [
+        "@cloudflare/vite-plugin"
+      ],
+      "range": "<=0.0.0-kickoff-demo || 3.108.0 - 4.93.0",
+      "nodes": [
+        "node_modules/wrangler"
+      ],
+      "fixAvailable": true
+    },
+    "ws": {
+      "name": "ws",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1119108,
+          "name": "ws",
+          "dependency": "ws",
+          "title": "ws: Uninitialized memory disclosure",
+          "url": "https://github.com/advisories/GHSA-58qx-3vcg-4xpx",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-908"
+          ],
+          "cvss": {
+            "score": 4.4,
+            "vectorString": "CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:U/C:H/I:N/A:N"
+          },
+          "range": ">=8.0.0 <8.20.1"
+        }
+      ],
+      "effects": [
+        "@cloudflare/vite-plugin",
+        "miniflare"
+      ],
+      "range": "8.0.0 - 8.20.0",
+      "nodes": [
+        "node_modules/@supabase/realtime-js/node_modules/ws",
+        "node_modules/ws"
+      ],
+      "fixAvailable": true
+    },
+    "yaml": {
+      "name": "yaml",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        {
+          "source": 1115556,
+          "name": "yaml",
+          "dependency": "yaml",
+          "title": "yaml is vulnerable to Stack Overflow via deeply nested YAML collections",
+          "url": "https://github.com/advisories/GHSA-48c2-rrv3-qjmp",
+          "severity": "moderate",
+          "cwe": [
+            "CWE-674"
+          ],
+          "cvss": {
+            "score": 4.3,
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L"
+          },
+          "range": ">=2.0.0 <2.8.3"
+        }
+      ],
+      "effects": [
+        "yaml-language-server"
+      ],
+      "range": "2.0.0 - 2.8.2",
+      "nodes": [
+        "node_modules/yaml-language-server/node_modules/yaml"
+      ],
+      "fixAvailable": {
+        "name": "@astrojs/check",
+        "version": "0.9.2",
+        "isSemVerMajor": true
+      }
+    },
+    "yaml-language-server": {
+      "name": "yaml-language-server",
+      "severity": "moderate",
+      "isDirect": false,
+      "via": [
+        "yaml"
+      ],
+      "effects": [
+        "volar-service-yaml"
+      ],
+      "range": "1.11.1-08d5f7b.0 - 1.21.1-f1f5a94.0 || 1.22.1-0ae5603.0 - 1.22.1-fc5f874.0",
+      "nodes": [
+        "node_modules/yaml-language-server"
+      ],
+      "fixAvailable": {
+        "name": "@astrojs/check",
+        "version": "0.9.2",
+        "isSemVerMajor": true
+      }
+    }
+  },
+  "metadata": {
+    "vulnerabilities": {
+      "info": 0,
+      "low": 0,
+      "moderate": 9,
+      "high": 1,
+      "critical": 0,
+      "total": 10
+    },
+    "dependencies": {
+      "prod": 449,
+      "dev": 316,
+      "optional": 131,
+      "peer": 0,
+      "peerOptional": 0,
+      "total": 895
+    }
+  }
+}
+
