@@ -273,9 +273,9 @@ Brak dedykowanego test runnera w projekcie. Testowanie przez lint + build + manu
 
 #### Automated
 
-- [ ] 1.1 Type-checking passes after API routes added (`npx astro sync && npx tsc --noEmit`)
-- [ ] 1.2 Lint passes for new files (`npm run lint`)
-- [ ] 1.3 Build passes (`npm run build`)
+- [x] 1.1 Type-checking passes after API routes added (`npx astro sync && npx tsc --noEmit`)
+- [x] 1.2 Lint passes for new files (`npm run lint`)
+- [x] 1.3 Build passes (`npm run build`)
 
 #### Manual
 
