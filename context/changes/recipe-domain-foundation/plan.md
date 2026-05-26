@@ -260,10 +260,10 @@ Domykamy F-01 jako gotowy fundament: porządkujemy handoff do S-01 i potwierdzam
 
 #### Automated
 
-- [x] 3.1 Końcowa walidacja quality gates przechodzi (`npm run lint` i `npm run build`)
-- [x] 3.2 Historia migracji jest deterministyczna i gotowa do clean env
+- [x] 3.1 Końcowa walidacja quality gates przechodzi (`npm run lint` i `npm run build`) — 37a189c
+- [x] 3.2 Historia migracji jest deterministyczna i gotowa do clean env — 37a189c
 
 #### Manual
 
-- [x] 3.3 Handoff do S-01 jest czytelny i jednoznaczny
-- [x] 3.4 Brak ukrytych decyzji blokujących start S-01
+- [x] 3.3 Handoff do S-01 jest czytelny i jednoznaczny — 37a189c
+- [x] 3.4 Brak ukrytych decyzji blokujących start S-01 — 37a189c
