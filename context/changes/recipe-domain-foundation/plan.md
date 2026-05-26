@@ -234,27 +234,27 @@ Domykamy F-01 jako gotowy fundament: porządkujemy handoff do S-01 i potwierdzam
 
 #### Automated
 
-- [x] 1.1 Sekwencja migracji jest kompletna i uporządkowana po timestampach
-- [x] 1.2 Lokalne odtworzenie bazy z migracji kończy się sukcesem (`npx supabase db reset`)
-- [x] 1.3 Lint przechodzi po zmianach (`npm run lint`)
+- [x] 1.1 Sekwencja migracji jest kompletna i uporządkowana po timestampach — deb0a5c
+- [x] 1.2 Lokalne odtworzenie bazy z migracji kończy się sukcesem (`npx supabase db reset`) — deb0a5c
+- [x] 1.3 Lint przechodzi po zmianach (`npm run lint`) — deb0a5c
 
 #### Manual
 
-- [ ] 1.4 Ownership działa: użytkownik A nie ma dostępu do rekordów użytkownika B
-- [ ] 1.5 Usunięcie taxonomy z istniejącymi powiązaniami jest blokowane
+- [x] 1.4 Ownership działa: użytkownik A nie ma dostępu do rekordów użytkownika B
+- [x] 1.5 Usunięcie taxonomy z istniejącymi powiązaniami jest blokowane
 
 ### Phase 2: Domain Contracts and Service Layer
 
 #### Automated
 
 - [x] 2.1 Type-checking przechodzi dla nowych kontraktów (`npx astro sync`)
-- [ ] 2.2 Lint przechodzi dla nowych plików i importów (`npm run lint`)
+- [x] 2.2 Lint przechodzi dla nowych plików i importów (`npm run lint`)
 - [x] 2.3 Build przechodzi po dodaniu warstwy service (`npm run build`)
 
 #### Manual
 
-- [ ] 2.4 Kontrakty typów i service są jednoznaczne dla implementacji S-01
-- [ ] 2.5 Naruszenia ownership i integrity zwracają kontrolowane błędy domenowe
+- [x] 2.4 Kontrakty typów i service są jednoznaczne dla implementacji S-01
+- [x] 2.5 Naruszenia ownership i integrity zwracają kontrolowane błędy domenowe
 
 ### Phase 3: Foundation Verification and Handoff Readiness
 
