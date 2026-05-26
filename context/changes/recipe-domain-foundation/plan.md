@@ -240,30 +240,30 @@ Domykamy F-01 jako gotowy fundament: porządkujemy handoff do S-01 i potwierdzam
 
 #### Manual
 
-- [x] 1.4 Ownership działa: użytkownik A nie ma dostępu do rekordów użytkownika B
-- [x] 1.5 Usunięcie taxonomy z istniejącymi powiązaniami jest blokowane
+- [x] 1.4 Ownership działa: użytkownik A nie ma dostępu do rekordów użytkownika B — e65ec0d
+- [x] 1.5 Usunięcie taxonomy z istniejącymi powiązaniami jest blokowane — e65ec0d
 
 ### Phase 2: Domain Contracts and Service Layer
 
 #### Automated
 
-- [x] 2.1 Type-checking przechodzi dla nowych kontraktów (`npx astro sync`)
-- [x] 2.2 Lint przechodzi dla nowych plików i importów (`npm run lint`)
-- [x] 2.3 Build przechodzi po dodaniu warstwy service (`npm run build`)
+- [x] 2.1 Type-checking przechodzi dla nowych kontraktów (`npx astro sync`) — e65ec0d
+- [x] 2.2 Lint przechodzi dla nowych plików i importów (`npm run lint`) — e65ec0d
+- [x] 2.3 Build przechodzi po dodaniu warstwy service (`npm run build`) — e65ec0d
 
 #### Manual
 
-- [x] 2.4 Kontrakty typów i service są jednoznaczne dla implementacji S-01
-- [x] 2.5 Naruszenia ownership i integrity zwracają kontrolowane błędy domenowe
+- [x] 2.4 Kontrakty typów i service są jednoznaczne dla implementacji S-01 — e65ec0d
+- [x] 2.5 Naruszenia ownership i integrity zwracają kontrolowane błędy domenowe — e65ec0d
 
 ### Phase 3: Foundation Verification and Handoff Readiness
 
 #### Automated
 
-- [ ] 3.1 Końcowa walidacja quality gates przechodzi (`npm run lint` i `npm run build`)
+- [x] 3.1 Końcowa walidacja quality gates przechodzi (`npm run lint` i `npm run build`)
 - [x] 3.2 Historia migracji jest deterministyczna i gotowa do clean env
 
 #### Manual
 
-- [ ] 3.3 Handoff do S-01 jest czytelny i jednoznaczny
-- [ ] 3.4 Brak ukrytych decyzji blokujących start S-01
+- [x] 3.3 Handoff do S-01 jest czytelny i jednoznaczny
+- [x] 3.4 Brak ukrytych decyzji blokujących start S-01
