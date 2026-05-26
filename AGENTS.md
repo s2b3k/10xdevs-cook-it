@@ -23,7 +23,7 @@ This repository is a server-rendered Astro 6 web app with React islands, TypeScr
 
 - App code lives in @src/ with routes in @src/pages/, shared logic in @src/lib/, middleware in @src/middleware.ts, and UI components in @src/components/.
 - Supabase and DB assets live in @supabase/.
-- Use the alias configured in @tsconfig.json: @/* resolves to src/*.
+- Use the alias configured in @tsconfig.json: @/_ resolves to src/_.
 
 ## Coding Style and Quality Gates
 

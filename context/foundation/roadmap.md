@@ -29,21 +29,21 @@ W tym roadmapie najpierw dostarczamy walidacyjny punkt produktu, czyli najmniejs
 
 ## At a glance
 
-| ID | Change ID | Outcome (user can ...) | Prerequisites | PRD refs | Status |
-|---|---|---|---|---|---|
-| F-01 | recipe-domain-foundation | (foundation) aplikacja ma minimalny model przepisu, taksonomii i wlasciciela danych gotowy pod przeplywy MVP | - | Access Control, FR-001, FR-003 | ready |
-| S-01 | add-recipe-with-taxonomy | user can add a recipe recznie lub copy-paste i zapisac podstawowe metadane taksonomiczne | F-01 | FR-001, FR-003, Success Criteria (Primary) | proposed |
-| S-02 | search-recipes-autocomplete-and-details | user can wyszukac przepis po taksonomii i skladniku, zobaczyc karty wynikow i otworzyc pelny widok | S-01 | US-01, FR-004, FR-005, Non-Functional Requirements (search <= 1.5s p95) | proposed |
-| S-03 | edit-and-delete-recipe | user can edytowac i usuwac istniejace przepisy bez utraty kontroli nad wlasna baza | S-01 | FR-002 | proposed |
+| ID   | Change ID                               | Outcome (user can ...)                                                                                       | Prerequisites | PRD refs                                                                | Status   |
+| ---- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------- | ----------------------------------------------------------------------- | -------- |
+| F-01 | recipe-domain-foundation                | (foundation) aplikacja ma minimalny model przepisu, taksonomii i wlasciciela danych gotowy pod przeplywy MVP | -             | Access Control, FR-001, FR-003                                          | ready    |
+| S-01 | add-recipe-with-taxonomy                | user can add a recipe recznie lub copy-paste i zapisac podstawowe metadane taksonomiczne                     | F-01          | FR-001, FR-003, Success Criteria (Primary)                              | proposed |
+| S-02 | search-recipes-autocomplete-and-details | user can wyszukac przepis po taksonomii i skladniku, zobaczyc karty wynikow i otworzyc pelny widok           | S-01          | US-01, FR-004, FR-005, Non-Functional Requirements (search <= 1.5s p95) | proposed |
+| S-03 | edit-and-delete-recipe                  | user can edytowac i usuwac istniejace przepisy bez utraty kontroli nad wlasna baza                           | S-01          | FR-002                                                                  | proposed |
 
 ## Streams
 
 Navigation aid - groups items that share a Prerequisites chain. Canonical ordering still lives in the dependency graph below; this table is the proposed reading order across parallel tracks.
 
-| Stream | Theme | Chain | Note |
-|---|---|---|---|
-| A | Ingest i decyzja | `F-01` -> `S-01` -> `S-02` | To glowny lancuch walidujacy wartosc produktu przy celu speed. |
-| B | Higiena bazy przepisow | `S-03` | Dziala rownolegle do `S-02` po domknieciu `S-01`; zmniejsza chaos i utrzymuje jakosc danych. |
+| Stream | Theme                  | Chain                      | Note                                                                                         |
+| ------ | ---------------------- | -------------------------- | -------------------------------------------------------------------------------------------- |
+| A      | Ingest i decyzja       | `F-01` -> `S-01` -> `S-02` | To glowny lancuch walidujacy wartosc produktu przy celu speed.                               |
+| B      | Higiena bazy przepisow | `S-03`                     | Dziala rownolegle do `S-02` po domknieciu `S-01`; zmniejsza chaos i utrzymuje jakosc danych. |
 
 ## Baseline
 
@@ -113,12 +113,12 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 ## Backlog Handoff
 
-| Roadmap ID | Change ID | Suggested issue title | Ready for `/10x-plan` | Notes |
-|---|---|---|---|---|
-| F-01 | recipe-domain-foundation | MVP foundation: spojny model przepisu, taksonomii i wlasciciela | yes | Foundation jest ready i odblokowuje wszystkie pionowe slices. |
-| S-01 | add-recipe-with-taxonomy | MVP slice: dodanie przepisu z metadanymi | no | Wymaga domkniecia F-01. |
-| S-02 | search-recipes-autocomplete-and-details | MVP north star: wyszukiwanie + autocomplete + karty + szczegoly | no | Wymaga S-01. |
-| S-03 | edit-and-delete-recipe | MVP slice: edycja i usuwanie przepisu | no | Wymaga S-01. |
+| Roadmap ID | Change ID                               | Suggested issue title                                           | Ready for `/10x-plan` | Notes                                                         |
+| ---------- | --------------------------------------- | --------------------------------------------------------------- | --------------------- | ------------------------------------------------------------- |
+| F-01       | recipe-domain-foundation                | MVP foundation: spojny model przepisu, taksonomii i wlasciciela | yes                   | Foundation jest ready i odblokowuje wszystkie pionowe slices. |
+| S-01       | add-recipe-with-taxonomy                | MVP slice: dodanie przepisu z metadanymi                        | no                    | Wymaga domkniecia F-01.                                       |
+| S-02       | search-recipes-autocomplete-and-details | MVP north star: wyszukiwanie + autocomplete + karty + szczegoly | no                    | Wymaga S-01.                                                  |
+| S-03       | edit-and-delete-recipe                  | MVP slice: edycja i usuwanie przepisu                           | no                    | Wymaga S-01.                                                  |
 
 ## Open Roadmap Questions
 

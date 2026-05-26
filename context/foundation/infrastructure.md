@@ -20,14 +20,14 @@ For this Astro 6 SSR stack, Cloudflare is the strongest fit because the reposito
 
 Scoring key: Pass = 2, Partial = 1, Fail = 0. Weighted toward CLI-first, managed/serverless, and stable deploy API. Soft weights applied: cost sensitivity high, global edge low-medium, no familiarity tie-break, co-location low.
 
-| Platform | CLI-first | Managed/Serverless | Agent-readable docs | Stable deploy API | MCP / Integration | Total |
-|---|---|---|---|---|---|---|
-| Cloudflare Workers + Pages | Pass | Pass | Pass | Pass | Partial | 9.0 |
-| Netlify | Partial | Pass | Pass | Partial | Partial | 7.0 |
-| Railway | Pass | Partial | Partial | Pass | Partial | 6.8 |
-| Vercel | Pass | Pass | Partial | Pass | Partial | 6.6 |
-| Render | Partial | Partial | Pass | Partial | Partial | 5.8 |
-| Fly.io | Pass | Partial | Pass | Partial | Fail | 5.6 |
+| Platform                   | CLI-first | Managed/Serverless | Agent-readable docs | Stable deploy API | MCP / Integration | Total |
+| -------------------------- | --------- | ------------------ | ------------------- | ----------------- | ----------------- | ----- |
+| Cloudflare Workers + Pages | Pass      | Pass               | Pass                | Pass              | Partial           | 9.0   |
+| Netlify                    | Partial   | Pass               | Pass                | Partial           | Partial           | 7.0   |
+| Railway                    | Pass      | Partial            | Partial             | Pass              | Partial           | 6.8   |
+| Vercel                     | Pass      | Pass               | Partial             | Pass              | Partial           | 6.6   |
+| Render                     | Partial   | Partial            | Pass                | Partial           | Partial           | 5.8   |
+| Fly.io                     | Pass      | Partial            | Pass                | Partial           | Fail              | 5.6   |
 
 Cloudflare Workers + Pages: Strong CLI loop via Wrangler for deploy, logs, and versions. Native fit for Astro 6 with @astrojs/cloudflare already in this codebase. Pricing is very favorable for low-traffic MVP workloads. MCP/observability integration exists but includes beta surfaces (checked 2026-05-25), so treated as Partial.
 
@@ -89,14 +89,14 @@ How the chosen platform operates in day-to-day MVP work.
 
 ## Risk Register
 
-| Risk | Source | Likelihood | Impact | Mitigation |
-|---|---|---|---|---|
-| Node compatibility gaps in future dependencies | Devil's advocate | M | H | Add dependency admission check for Workers compatibility before merge; keep a small compatibility test route in CI preview. |
-| CPU/request constraints on heavier SSR endpoints | Devil's advocate | M | M | Profile hot routes early, cache where safe, and enforce response-time budget alerts. |
-| Data rollback mismatch after schema changes | Pre-mortem | M | H | Require forward-and-backward migration plans and dry-run migration checks before production apply. |
-| Local vs production runtime drift | Research finding | M | M | Validate each release on preview with production-like env vars and smoke tests before publish. |
-| Over-reliance on beta integration surfaces | Unknown unknowns | L | M | Treat beta/preview features as optional; keep primary workflow on GA Wrangler commands. |
-| Cost drift from CPU-heavy request mix | Unknown unknowns | M | M | Track cost and request-class metrics monthly; set budget alerts and tune expensive routes. |
+| Risk                                             | Source           | Likelihood | Impact | Mitigation                                                                                                                  |
+| ------------------------------------------------ | ---------------- | ---------- | ------ | --------------------------------------------------------------------------------------------------------------------------- |
+| Node compatibility gaps in future dependencies   | Devil's advocate | M          | H      | Add dependency admission check for Workers compatibility before merge; keep a small compatibility test route in CI preview. |
+| CPU/request constraints on heavier SSR endpoints | Devil's advocate | M          | M      | Profile hot routes early, cache where safe, and enforce response-time budget alerts.                                        |
+| Data rollback mismatch after schema changes      | Pre-mortem       | M          | H      | Require forward-and-backward migration plans and dry-run migration checks before production apply.                          |
+| Local vs production runtime drift                | Research finding | M          | M      | Validate each release on preview with production-like env vars and smoke tests before publish.                              |
+| Over-reliance on beta integration surfaces       | Unknown unknowns | L          | M      | Treat beta/preview features as optional; keep primary workflow on GA Wrangler commands.                                     |
+| Cost drift from CPU-heavy request mix            | Unknown unknowns | M          | M      | Track cost and request-class metrics monthly; set budget alerts and tune expensive routes.                                  |
 
 ## Getting Started
 
@@ -109,6 +109,7 @@ How the chosen platform operates in day-to-day MVP work.
 ## Out of Scope
 
 The following were not evaluated in this research:
+
 - Docker image configuration
 - CI/CD pipeline setup
 - Production-scale architecture (multi-region, HA, DR)

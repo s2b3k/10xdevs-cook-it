@@ -234,9 +234,9 @@ Domykamy F-01 jako gotowy fundament: porządkujemy handoff do S-01 i potwierdzam
 
 #### Automated
 
-- [ ] 1.1 Sekwencja migracji jest kompletna i uporządkowana po timestampach
-- [ ] 1.2 Lokalne odtworzenie bazy z migracji kończy się sukcesem (`npx supabase db reset`)
-- [ ] 1.3 Lint przechodzi po zmianach (`npm run lint`)
+- [x] 1.1 Sekwencja migracji jest kompletna i uporządkowana po timestampach
+- [x] 1.2 Lokalne odtworzenie bazy z migracji kończy się sukcesem (`npx supabase db reset`)
+- [x] 1.3 Lint przechodzi po zmianach (`npm run lint`)
 
 #### Manual
 
@@ -247,9 +247,9 @@ Domykamy F-01 jako gotowy fundament: porządkujemy handoff do S-01 i potwierdzam
 
 #### Automated
 
-- [ ] 2.1 Type-checking przechodzi dla nowych kontraktów (`npx astro sync`)
+- [x] 2.1 Type-checking przechodzi dla nowych kontraktów (`npx astro sync`)
 - [ ] 2.2 Lint przechodzi dla nowych plików i importów (`npm run lint`)
-- [ ] 2.3 Build przechodzi po dodaniu warstwy service (`npm run build`)
+- [x] 2.3 Build przechodzi po dodaniu warstwy service (`npm run build`)
 
 #### Manual
 
@@ -261,7 +261,7 @@ Domykamy F-01 jako gotowy fundament: porządkujemy handoff do S-01 i potwierdzam
 #### Automated
 
 - [ ] 3.1 Końcowa walidacja quality gates przechodzi (`npm run lint` i `npm run build`)
-- [ ] 3.2 Historia migracji jest deterministyczna i gotowa do clean env
+- [x] 3.2 Historia migracji jest deterministyczna i gotowa do clean env
 
 #### Manual
 

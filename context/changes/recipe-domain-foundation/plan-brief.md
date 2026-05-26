@@ -16,24 +16,26 @@ Po zakończeniu F-01 baza danych ma gotowe tabele i relacje recipe/taxonomy, RLS
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) |
-| --- | --- | --- |
-| Zakres F-01 | Model danych + minimalny service layer | Odblokowuje S-01 bez mieszania fundamentu z pełnym feature API. |
-| Priorytet jakości | Ownership + RLS + integralność relacji | To najwyższe ryzyko kosztownego reworku, więc musi być domknięte najpierw. |
-| Model taksonomii | Osobna encja taxonomy + tabela łącząca | Daje trwałą bazę pod FR-003 i filtrowanie/autocomplete w S-02. |
-| Usuwanie taxonomy | Blokada usunięcia przy aktywnych powiązaniach | Chroni przed utratą spójności klasyfikacji przepisów. |
-| Kontrakt błędów | Ujednolicone błędy JSON/domenowe | Stabilizuje integrację service/API i upraszcza obsługę kolejnych slice'ów. |
-| Rollout migracji | Małe, sekwencyjne migracje | Ułatwia rollback i bezpieczne wdrażanie po godzinach. |
+| Decision          | Choice                                        | Why (1 sentence)                                                           |
+| ----------------- | --------------------------------------------- | -------------------------------------------------------------------------- |
+| Zakres F-01       | Model danych + minimalny service layer        | Odblokowuje S-01 bez mieszania fundamentu z pełnym feature API.            |
+| Priorytet jakości | Ownership + RLS + integralność relacji        | To najwyższe ryzyko kosztownego reworku, więc musi być domknięte najpierw. |
+| Model taksonomii  | Osobna encja taxonomy + tabela łącząca        | Daje trwałą bazę pod FR-003 i filtrowanie/autocomplete w S-02.             |
+| Usuwanie taxonomy | Blokada usunięcia przy aktywnych powiązaniach | Chroni przed utratą spójności klasyfikacji przepisów.                      |
+| Kontrakt błędów   | Ujednolicone błędy JSON/domenowe              | Stabilizuje integrację service/API i upraszcza obsługę kolejnych slice'ów. |
+| Rollout migracji  | Małe, sekwencyjne migracje                    | Ułatwia rollback i bezpieczne wdrażanie po godzinach.                      |
 
 ## Scope
 
 **In scope:**
+
 - Schema recipe/taxonomy + relacja wiele-do-wielu
 - RLS/policies dla ownership i bezpieczeństwa danych
 - Minimalne indeksy pod ownership i taxonomy
 - Typy domenowe i podstawowa warstwa service
 
 **Out of scope:**
+
 - Pełne endpointy feature i UI dla recipe
 - Logika autocomplete/ranking wyszukiwania
 - Integracje poza MVP (URL import, YouTube, sharing)
@@ -44,11 +46,11 @@ Podejście trójfazowe: najpierw baza i polityki dostępu, następnie kontrakty 
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-| --- | --- | --- |
-| 1. Schema, Ownership and RLS Foundation | Tabele, relacje, RLS, indeksy | Błędna polityka dostępu lub niespójne constrainty |
-| 2. Domain Contracts and Service Layer | src/types.ts + recipe service + model błędów | Niestabilny kontrakt między service i przyszłym API |
-| 3. Foundation Verification and Handoff Readiness | Potwierdzona gotowość fundamentu do S-01 | Niedomknięte decyzje ukryte w implementacji |
+| Phase                                            | What it delivers                             | Key risk                                            |
+| ------------------------------------------------ | -------------------------------------------- | --------------------------------------------------- |
+| 1. Schema, Ownership and RLS Foundation          | Tabele, relacje, RLS, indeksy                | Błędna polityka dostępu lub niespójne constrainty   |
+| 2. Domain Contracts and Service Layer            | src/types.ts + recipe service + model błędów | Niestabilny kontrakt między service i przyszłym API |
+| 3. Foundation Verification and Handoff Readiness | Potwierdzona gotowość fundamentu do S-01     | Niedomknięte decyzje ukryte w implementacji         |
 
 **Prerequisites:** działające środowisko Supabase lokalnie, uprawnienia do migracji, aktywne quality gates (lint/build).
 **Estimated effort:** ~2-3 sesje pracy rozłożone na 3 fazy.
