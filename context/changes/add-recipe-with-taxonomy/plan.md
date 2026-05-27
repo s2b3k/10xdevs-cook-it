@@ -279,16 +279,16 @@ Brak dedykowanego test runnera w projekcie. Testowanie przez lint + build + manu
 
 #### Manual
 
-- [ ] 1.4 POST /api/recipes z poprawnym body i sesją zwraca 201 + Recipe
-- [ ] 1.5 POST /api/taxonomy z duplikatem zwraca 200 (upsert, brak 409)
+- [x] 1.4 POST /api/recipes z poprawnym body i sesją zwraca 201 + Recipe
+- [x] 1.5 POST /api/taxonomy z duplikatem zwraca 200 (upsert, brak 409)
 
 ### Phase 2: Pages and React Components
 
 #### Automated
 
-- [ ] 2.1 Type-checking passes after components added
-- [ ] 2.2 Lint passes
-- [ ] 2.3 Build passes
+- [x] 2.1 Type-checking passes after components added
+- [x] 2.2 Lint passes
+- [x] 2.3 Build passes
 
 #### Manual
 
