@@ -301,5 +301,5 @@ Brak dedykowanego test runnera w projekcie. Testowanie przez lint + build + manu
 
 #### Manual
 
-- [ ] 3.3 Istniejące przepływy auth działają bez regresji
+- [x] 3.3 Istniejące przepływy auth działają bez regresji
 - [x] 3.4 Cały flow S-01 end-to-end potwierdzony

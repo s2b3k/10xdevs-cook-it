@@ -1,9 +1,9 @@
 ---
 change_id: add-recipe-with-taxonomy
 title: Add recipe with taxonomy metadata (S-01)
-status: implementing
+status: implemented
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-05-27
 archived_at: null
 ---
 
