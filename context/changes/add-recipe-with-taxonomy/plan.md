@@ -266,6 +266,14 @@ Brak dedykowanego test runnera w projekcie. Testowanie przez lint + build + manu
 
 > Convention: `- [ ]` pending, `- [x]` done. Append ` — <commit sha>` when a step lands. Do not rename step titles.
 
+### Phase 1: API Backend
+
+#### Automated
+
+- [x] 1.1 Type-checking passes after API routes added (`npx astro sync && npx tsc --noEmit`) — 5c90403
+- [x] 1.2 Lint passes for new files (`npm run lint`) — 5c90403
+- [x] 1.3 Build passes (`npm run build`) — 5c90403
+
 #### Manual
 
 - [x] 1.4 POST /api/recipes z poprawnym body i sesją zwraca 201 + Recipe
