@@ -1,9 +1,11 @@
 ## cook.it - MVP
 
 ### Główny problem
+
 Wymyślanie pomysłu na obiad/śniadanie/kolacje/deser jest często problematyczne chąc uniknąć monotonii i powtarzalności. Przepisy często są porozrzucane po różnych miejscach, linki potrafią znikać z internetu, a człowiek często zapomina o jakiś przepisach, które lubił/kiedyś robił.
 
 ### Najmniejszy zestaw funkcjonalności
+
 - Możliwość stworzenia własnej bazy przepisów (dodawanie/usuwanie/edycja)
 - System taksonomii, który umożliwia łatwe wyszukiwanie przepisów i tworzenie powiązań między nimi
 - Prosty interfejs search'a - jednen input z autocompletem (możliwe, że wspieranym przez AI), np: "kuchnia włoska" pokaże wszystkie przepisy w stylu włoskim; "kiełbasa" pokaże wszystkie przepisy których składnikiem jest kiełbasa; "grill" pokaże wszystkie przepisy, która mogą być przygotowane na grillu.
@@ -13,6 +15,7 @@ Wymyślanie pomysłu na obiad/śniadanie/kolacje/deser jest często problematycz
 - Opcjonalnie możliwość tworzenia przepisów przez AI poprzez wklejenie treści przepisu / wskazanie urla do przepisu / wskazanie urla do wideo youtube z przepisem
 
 ### Co NIE wchodzi w zakres MVP
+
 - zaawansowany profil użytkownika
 - możliwość udostępniania przepisów innym użytkownikom
 - zaawansowane algorytmy scrappowania treści/wyciągania danych z youtube
@@ -20,5 +23,6 @@ Wymyślanie pomysłu na obiad/śniadanie/kolacje/deser jest często problematycz
 - przechowywanie plików graficznych użytkownika
 
 ### Kryteria sukcesu
+
 - możliwość szybkiego dodawania przepisów, które po dodaniu mają bardzo ustandaryzowaną strukturę (zdjęcie, składniki, przepis krok po kroku, taksonomie)
 - każdy przepis posiada dobrze dodane taksonomie/meta dane, które pozwalają łatwo wyszukać przepisy spełniające kryteria

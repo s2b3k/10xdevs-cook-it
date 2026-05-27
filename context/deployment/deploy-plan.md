@@ -138,8 +138,8 @@ Status: first production deployment completed
 
 - Version list captured via npx wrangler versions list
 - Available version IDs:
-   - 5a55eb67-83cb-404d-b96b-4a497943fbf9
-   - d358e070-ce61-474a-b600-62d93abdbe35
+  - 5a55eb67-83cb-404d-b96b-4a497943fbf9
+  - d358e070-ce61-474a-b600-62d93abdbe35
 - Rollback command path validated: npx wrangler rollback <version-id>
 
 ### Notes
