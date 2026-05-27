@@ -262,20 +262,9 @@ Brak dedykowanego test runnera w projekcie. Testowanie przez lint + build + manu
 - Error model: `src/lib/services/recipe.errors.ts`
 - Auth API pattern: `src/pages/api/auth/signup.ts`
 - Auth React form pattern: `src/components/auth/SignUpForm.tsx`
-
----
-
 ## Progress
 
 > Convention: `- [ ]` pending, `- [x]` done. Append ` — <commit sha>` when a step lands. Do not rename step titles.
-
-### Phase 1: API Backend
-
-#### Automated
-
-- [x] 1.1 Type-checking passes after API routes added (`npx astro sync && npx tsc --noEmit`) — 5c90403
-- [x] 1.2 Lint passes for new files (`npm run lint`) — 5c90403
-- [x] 1.3 Build passes (`npm run build`) — 5c90403
 
 #### Manual
 
@@ -286,9 +275,9 @@ Brak dedykowanego test runnera w projekcie. Testowanie przez lint + build + manu
 
 #### Automated
 
-- [x] 2.1 Type-checking passes after components added
-- [x] 2.2 Lint passes
-- [x] 2.3 Build passes
+- [x] 2.1 Type-checking passes after components added — 1ab8d8d
+- [x] 2.2 Lint passes — 1ab8d8d
+- [x] 2.3 Build passes — 1ab8d8d
 
 #### Manual
 
