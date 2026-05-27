@@ -289,17 +289,17 @@ Brak dedykowanego test runnera w projekcie. Testowanie przez lint + build + manu
 
 #### Manual
 
-- [ ] 2.4 Pełny flow dodania przepisu z tagami — redirect na `/recipes` z kartą
-- [ ] 2.5 Formularz bez tytułu — inline field error widoczny
+- [x] 2.4 Pełny flow dodania przepisu z tagami — redirect na `/recipes` z kartą
+- [x] 2.5 Formularz bez tytułu — inline field error widoczny
 
 ### Phase 3: Integration Verification
 
 #### Automated
 
-- [ ] 3.1 Lint clean (`npm run lint`)
-- [ ] 3.2 Build clean (`npm run build`)
+- [x] 3.1 Lint clean (`npm run lint`) — 1ab8d8d
+- [x] 3.2 Build clean (`npm run build`) — 1ab8d8d
 
 #### Manual
 
 - [ ] 3.3 Istniejące przepływy auth działają bez regresji
-- [ ] 3.4 Cały flow S-01 end-to-end potwierdzony
+- [x] 3.4 Cały flow S-01 end-to-end potwierdzony
