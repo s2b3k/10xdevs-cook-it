@@ -88,6 +88,8 @@ export default function AddRecipeForm() {
         throw new Error(createRecipePayload.error ?? "Failed to create recipe.");
       }
 
+      const failedTags: string[] = [];
+
       for (const tag of selectedTags) {
         const assignResponse = await fetch(`/api/recipes/${createRecipePayload.data.id}/taxonomy`, {
           method: "POST",
@@ -98,9 +100,16 @@ export default function AddRecipeForm() {
         });
 
         if (!assignResponse.ok) {
-          const payload = (await assignResponse.json()) as { error?: string };
-          throw new Error(payload.error ?? "Failed to assign taxonomy.");
+          failedTags.push(tag.name);
         }
+      }
+
+      if (failedTags.length > 0) {
+        const warning = encodeURIComponent(
+          `Recipe was saved, but ${failedTags.length} taxonomy tag(s) could not be assigned: ${failedTags.join(", ")}.`,
+        );
+        window.location.href = `/recipes?warning=${warning}`;
+        return;
       }
 
       window.location.href = "/recipes";

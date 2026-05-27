@@ -6,6 +6,7 @@ import { createRecipeService } from "@/lib/services/recipe.service";
 
 const { user } = Astro.locals;
 const supabase = createClient(Astro.request.headers, Astro.cookies);
+const warning = Astro.url.searchParams.get("warning");
 
 const recipes = user && supabase ? await createRecipeService(supabase, user.id).listRecipes() : [];
 ---
@@ -31,6 +32,14 @@ const recipes = user && supabase ? await createRecipeService(supabase, user.id).
           Add recipe
         </a>
       </div>
+
+      {
+        warning ? (
+          <div class="mb-6 rounded-xl border border-amber-300/30 bg-amber-500/15 px-4 py-3 text-sm text-amber-100">
+            {warning}
+          </div>
+        ) : null
+      }
 
       {
         recipes.length > 0 ? (

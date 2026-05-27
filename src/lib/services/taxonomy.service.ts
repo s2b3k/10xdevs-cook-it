@@ -19,7 +19,7 @@ function toTaxonomy(row: TaxonomyRow): Taxonomy {
 
 export interface TaxonomyService {
   searchTaxonomy(query: string, limit?: number): Promise<Taxonomy[]>;
-  createOrGetTaxonomy(input: CreateTaxonomyInput): Promise<Taxonomy>;
+  createOrGetTaxonomy(input: CreateTaxonomyInput): Promise<{ taxonomy: Taxonomy; isNew: boolean }>;
 }
 
 export function createTaxonomyService(supabase: SupabaseClient): TaxonomyService {
@@ -37,7 +37,7 @@ export function createTaxonomyService(supabase: SupabaseClient): TaxonomyService
     return data.map(toTaxonomy);
   }
 
-  async function createOrGetTaxonomy(input: CreateTaxonomyInput): Promise<Taxonomy> {
+  async function createOrGetTaxonomy(input: CreateTaxonomyInput): Promise<{ taxonomy: Taxonomy; isNew: boolean }> {
     const name = input.name.trim();
     const category = input.category?.trim() ?? null;
 
@@ -48,7 +48,7 @@ export function createTaxonomyService(supabase: SupabaseClient): TaxonomyService
       .single<TaxonomyRow>();
 
     if (!insertError) {
-      return toTaxonomy(inserted);
+      return { taxonomy: toTaxonomy(inserted), isNew: true };
     }
 
     // On unique conflict (23505), fetch the existing record
@@ -68,7 +68,7 @@ export function createTaxonomyService(supabase: SupabaseClient): TaxonomyService
         throw new Error(`Taxonomy '${name}' could not be created or found.`);
       }
 
-      return toTaxonomy(existing);
+      return { taxonomy: toTaxonomy(existing), isNew: false };
     }
 
     throw new Error(insertError.message);

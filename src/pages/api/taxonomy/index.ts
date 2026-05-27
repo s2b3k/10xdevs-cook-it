@@ -75,9 +75,9 @@ export const POST: APIRoute = async (context) => {
 
   try {
     const service = createTaxonomyService(supabase);
-    const tag = await service.createOrGetTaxonomy(parsed.data);
-    return new Response(JSON.stringify({ data: tag }), {
-      status: 200,
+    const { taxonomy, isNew } = await service.createOrGetTaxonomy(parsed.data);
+    return new Response(JSON.stringify({ data: taxonomy }), {
+      status: isNew ? 201 : 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
