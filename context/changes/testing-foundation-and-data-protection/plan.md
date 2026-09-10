@@ -241,23 +241,23 @@ No database migration is planned. Tests consume the existing migrations and cons
 
 #### Automated
 
-- [x] 2.1 Account B cannot read account A's recipe
-- [x] 2.2 Account B cannot update or delete account A's recipe
-- [x] 2.3 Account B cannot assign or remove a relation on account A's recipe
-- [x] 2.4 Account A can access its own recipe and relation fixtures
+- [x] 2.1 Account B cannot read account A's recipe — 435b8f6
+- [x] 2.2 Account B cannot update or delete account A's recipe — 435b8f6
+- [x] 2.3 Account B cannot assign or remove a relation on account A's recipe — 435b8f6
+- [x] 2.4 Account A can access its own recipe and relation fixtures — 435b8f6
 
 #### Manual
 
-- [x] 2.5 Removing an ownership predicate makes the R3 suite fail
+- [x] 2.5 Removing an ownership predicate makes the R3 suite fail — 435b8f6
 
 ### Phase 3: R5 Relation-Integrity Integration Tests
 
 #### Automated
 
-- [ ] 3.1 Duplicate assignment preserves one relation and maps to conflict
-- [ ] 3.2 Missing references map to integrity errors with no relation created
-- [ ] 3.3 Recipe deletion cascades relations while preserving taxonomy rows
-- [ ] 3.4 Referenced taxonomy deletion is rejected and preserves relation state
+- [x] 3.1 Duplicate assignment preserves one relation and maps to conflict
+- [x] 3.2 Missing references map to integrity errors with no relation created
+- [x] 3.3 Recipe deletion cascades relations while preserving taxonomy rows
+- [x] 3.4 Referenced taxonomy deletion is rejected and preserves relation state
 
 #### Manual
 
