@@ -255,7 +255,7 @@ No database migration is planned. Tests consume the existing migrations and cons
 #### Automated
 
 - [x] 3.1 Duplicate assignment preserves one relation and maps to conflict — f7420ea
-- [x] 3.2 Missing references map to integrity errors with no relation created — f7420ea
+- [x] 3.2 Missing recipe references are blocked by RLS, missing taxonomy references map to integrity, and no relation is created — f7420ea
 - [x] 3.3 Recipe deletion cascades relations while preserving taxonomy rows — f7420ea
 - [x] 3.4 Referenced taxonomy deletion is rejected and preserves relation state — f7420ea
 

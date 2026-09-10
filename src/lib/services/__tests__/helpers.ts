@@ -150,6 +150,10 @@ function recipeInput(overrides: Partial<CreateRecipeInput> = {}): CreateRecipeIn
   };
 }
 
+/**
+ * Creates authenticated fixtures and a privileged client reserved for cleanup
+ * and final-state inspection. Authorization assertions must use user clients.
+ */
 export async function createTestContext(): Promise<TestContext> {
   const url = requireEnvironment("SUPABASE_URL");
   const anonKey = requireEnvironment("SUPABASE_KEY");
@@ -219,21 +223,40 @@ export async function createTestContext(): Promise<TestContext> {
     relations.push({ recipeId, taxonomyId });
   }
 
+  /** Cleanup uses the service-role client because user clients cannot remove every fixture. */
   async function cleanup(): Promise<void> {
+    const errors: string[] = [];
+
     for (const relation of relations) {
-      await admin
+      const { error } = await admin
         .from("recipe_taxonomy")
         .delete()
         .match({ recipe_id: relation.recipeId, taxonomy_id: relation.taxonomyId });
+      if (error) {
+        errors.push(`relation ${relation.recipeId}/${relation.taxonomyId}: ${describeError(error)}`);
+      }
     }
     for (const recipe of recipes) {
-      await admin.from("recipes").delete().eq("id", recipe.id);
+      const { error } = await admin.from("recipes").delete().eq("id", recipe.id);
+      if (error) {
+        errors.push(`recipe ${recipe.id}: ${describeError(error)}`);
+      }
     }
     for (const taxonomy of taxonomies) {
-      await admin.from("taxonomy").delete().eq("id", taxonomy.id);
+      const { error } = await admin.from("taxonomy").delete().eq("id", taxonomy.id);
+      if (error) {
+        errors.push(`taxonomy ${taxonomy.id}: ${describeError(error)}`);
+      }
     }
     for (const user of users) {
-      await admin.auth.admin.deleteUser(user.id);
+      const { error } = await admin.auth.admin.deleteUser(user.id);
+      if (error) {
+        errors.push(`user ${user.id}: ${describeError(error)}`);
+      }
+    }
+
+    if (errors.length > 0) {
+      throw new Error(`Integration fixture cleanup failed: ${errors.join("; ")}`);
     }
   }
 
