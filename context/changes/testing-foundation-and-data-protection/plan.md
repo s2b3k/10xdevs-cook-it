@@ -228,14 +228,14 @@ No database migration is planned. Tests consume the existing migrations and cons
 
 #### Automated
 
-- [x] 1.1 Vitest is installed and configured for Node/TypeScript execution
-- [x] 1.2 `npm run test:run` reaches the integration suite and fails clearly when Supabase prerequisites are absent
-- [x] 1.3 Authenticated fixture helpers create and clean up two users, recipes, taxonomy rows, and relations
+- [x] 1.1 Vitest is installed and configured for Node/TypeScript execution — 586a678
+- [x] 1.2 `npm run test:run` reaches the integration suite and fails clearly when Supabase prerequisites are absent — 586a678
+- [x] 1.3 Authenticated fixture helpers create and clean up two users, recipes, taxonomy rows, and relations — 586a678
 
 #### Manual
 
-- [x] 1.4 Hosted non-production Supabase setup starts the foundation suite without setup errors
-- [x] 1.5 Missing Supabase prerequisites produce an actionable failure
+- [x] 1.4 Hosted non-production Supabase setup starts the foundation suite without setup errors — 586a678
+- [x] 1.5 Missing Supabase prerequisites produce an actionable failure — 586a678
 
 ### Phase 2: R3 Data-Isolation Integration Tests
 
