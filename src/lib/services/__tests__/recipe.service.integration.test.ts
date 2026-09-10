@@ -138,10 +138,7 @@ describe("recipe service data isolation", () => {
 
     await owner.deleteRecipe(recipe.id);
 
-    const { data: recipes, error: recipeError } = await context.admin
-      .from("recipes")
-      .select("id")
-      .eq("id", recipe.id);
+    const { data: recipes, error: recipeError } = await context.admin.from("recipes").select("id").eq("id", recipe.id);
     const { data: relations, error: relationError } = await context.admin
       .from("recipe_taxonomy")
       .select("recipe_id, taxonomy_id")

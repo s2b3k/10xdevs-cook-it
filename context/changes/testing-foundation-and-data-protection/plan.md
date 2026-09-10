@@ -254,26 +254,26 @@ No database migration is planned. Tests consume the existing migrations and cons
 
 #### Automated
 
-- [x] 3.1 Duplicate assignment preserves one relation and maps to conflict
-- [x] 3.2 Missing references map to integrity errors with no relation created
-- [x] 3.3 Recipe deletion cascades relations while preserving taxonomy rows
-- [x] 3.4 Referenced taxonomy deletion is rejected and preserves relation state
+- [x] 3.1 Duplicate assignment preserves one relation and maps to conflict — f7420ea
+- [x] 3.2 Missing references map to integrity errors with no relation created — f7420ea
+- [x] 3.3 Recipe deletion cascades relations while preserving taxonomy rows — f7420ea
+- [x] 3.4 Referenced taxonomy deletion is rejected and preserves relation state — f7420ea
 
 #### Manual
 
-- [ ] 3.5 The local database contains no leftover fixture relations or users
+- [x] 3.5 The local database contains no leftover fixture relations or users — f7420ea
 
 ### Phase 4: Verification and Handoff
 
 #### Automated
 
-- [ ] 4.1 `npm run test:run` passes with local Supabase running
-- [ ] 4.2 `npm run lint` passes
-- [ ] 4.3 `npm run build` passes
-- [ ] 4.4 `npx astro sync` passes when run independently
-- [ ] 4.5 Phase 1 cookbook entry is no longer TBD
+- [x] 4.1 `npm run test:run` passes with local Supabase running
+- [x] 4.2 `npm run lint` passes
+- [x] 4.3 `npm run build` passes
+- [x] 4.4 `npx astro sync` passes when run independently
+- [x] 4.5 Phase 1 cookbook entry is no longer TBD
 
 #### Manual
 
-- [ ] 4.6 Suite is integration-only and needs no browser or Astro server
-- [ ] 4.7 Setup and cleanup work from a clean checkout
+- [x] 4.6 Suite is integration-only and needs no browser or Astro server
+- [x] 4.7 Setup and cleanup work from a clean checkout

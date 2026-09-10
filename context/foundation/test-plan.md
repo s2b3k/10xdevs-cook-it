@@ -12,34 +12,34 @@ The first rollout must bootstrap a test runner because the project currently has
 
 ## 2. Risk Map
 
-| # | Risk (failure scenario) | Impact | Likelihood | Source (evidence only) |
-|---|---|---|---|---|
-| R1 | The same tag is created in multiple spelling or casing variants, causing database growth and inconsistent search results. | High | High | Phase 2 interview Q1; PRD FR-003, FR-004 |
-| R2 | A recipe is saved without some tags or recipe data, while the user receives no trustworthy indication of the partial result. | High | High | Phase 2 interview Q1; S-01 implementation plan |
-| R3 | A user can read or modify a recipe or taxonomy relation belonging to another account. | High | Medium | PRD Access Control; F-01 implementation plan |
-| R4 | Client and server validation diverge, allowing invalid or excessive data into the database. | Medium | Medium | PRD FR-001, FR-003; S-01 implementation plan |
-| R5 | Recipe-taxonomy changes leave orphaned or invalid relations after an edge-case operation. | Medium | Medium | F-01 implementation plan: relation integrity |
-| R6 | Search by taxonomy and ingredient returns recipes that do not satisfy all query conditions. | High | Medium | PRD US-01, FR-004; roadmap S-02 |
+| #   | Risk (failure scenario)                                                                                                      | Impact | Likelihood | Source (evidence only)                         |
+| --- | ---------------------------------------------------------------------------------------------------------------------------- | ------ | ---------- | ---------------------------------------------- |
+| R1  | The same tag is created in multiple spelling or casing variants, causing database growth and inconsistent search results.    | High   | High       | Phase 2 interview Q1; PRD FR-003, FR-004       |
+| R2  | A recipe is saved without some tags or recipe data, while the user receives no trustworthy indication of the partial result. | High   | High       | Phase 2 interview Q1; S-01 implementation plan |
+| R3  | A user can read or modify a recipe or taxonomy relation belonging to another account.                                        | High   | Medium     | PRD Access Control; F-01 implementation plan   |
+| R4  | Client and server validation diverge, allowing invalid or excessive data into the database.                                  | Medium | Medium     | PRD FR-001, FR-003; S-01 implementation plan   |
+| R5  | Recipe-taxonomy changes leave orphaned or invalid relations after an edge-case operation.                                    | Medium | Medium     | F-01 implementation plan: relation integrity   |
+| R6  | Search by taxonomy and ingredient returns recipes that do not satisfy all query conditions.                                  | High   | Medium     | PRD US-01, FR-004; roadmap S-02                |
 
 ### Risk Response Guidance
 
-| Risk | What would prove protection | Must challenge | Context needed | Likely cheapest layer | Anti-pattern to avoid |
-|---|---|---|---|---|---|
-| R1 | Equivalent tag inputs resolve to one canonical tag and do not create additional records. | A `200 OK` response proves deduplication. | Normalization rule, uniqueness constraint, conflict behavior, and source of truth for existing tags. | Integration with the database | Testing only a normalizer without exercising database uniqueness. |
-| R2 | Recipe creation and tag assignment have an explicit, observable result even when one assignment fails. | Successful recipe creation means the whole operation succeeded. | Request sequence, persistence boundary, partial-failure contract, and user-visible warning behavior. | API/service integration | Happy-path-only coverage with no partial assignment failure. |
-| R3 | Account A cannot read or modify account B's recipe data or relations. | Being logged in is sufficient authorization. | Ownership predicate, RLS behavior, request identity, and relation access path. | Database integration | Testing only one authenticated account. |
-| R4 | The server rejects missing, malformed, and unexpected input independently of client-side validation. | Form validation protects the API. | Server schema, normalization, accepted fields, error contract, and persistence constraints. | API contract/integration | Copying implementation logic into expected test values. |
-| R5 | Edge-case relation operations preserve referential and uniqueness guarantees. | A successful insert proves the model is consistent. | Foreign keys, delete behavior, duplicate relation behavior, and domain error mapping. | Database integration | Asserting only that a row exists. |
-| R6 | A result satisfies every supplied taxonomy and ingredient condition and exposes the expected result contract. | Text similarity implies relevance. | Query semantics, AND/OR rules, ingredient representation, ordering, and independent fixture oracle. | Service/API integration, then selected e2e | E2e tests without an independent expected-result source. |
+| Risk | What would prove protection                                                                                   | Must challenge                                                  | Context needed                                                                                       | Likely cheapest layer                      | Anti-pattern to avoid                                             |
+| ---- | ------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------------ | ----------------------------------------------------------------- |
+| R1   | Equivalent tag inputs resolve to one canonical tag and do not create additional records.                      | A `200 OK` response proves deduplication.                       | Normalization rule, uniqueness constraint, conflict behavior, and source of truth for existing tags. | Integration with the database              | Testing only a normalizer without exercising database uniqueness. |
+| R2   | Recipe creation and tag assignment have an explicit, observable result even when one assignment fails.        | Successful recipe creation means the whole operation succeeded. | Request sequence, persistence boundary, partial-failure contract, and user-visible warning behavior. | API/service integration                    | Happy-path-only coverage with no partial assignment failure.      |
+| R3   | Account A cannot read or modify account B's recipe data or relations.                                         | Being logged in is sufficient authorization.                    | Ownership predicate, RLS behavior, request identity, and relation access path.                       | Database integration                       | Testing only one authenticated account.                           |
+| R4   | The server rejects missing, malformed, and unexpected input independently of client-side validation.          | Form validation protects the API.                               | Server schema, normalization, accepted fields, error contract, and persistence constraints.          | API contract/integration                   | Copying implementation logic into expected test values.           |
+| R5   | Edge-case relation operations preserve referential and uniqueness guarantees.                                 | A successful insert proves the model is consistent.             | Foreign keys, delete behavior, duplicate relation behavior, and domain error mapping.                | Database integration                       | Asserting only that a row exists.                                 |
+| R6   | A result satisfies every supplied taxonomy and ingredient condition and exposes the expected result contract. | Text similarity implies relevance.                              | Query semantics, AND/OR rules, ingredient representation, ordering, and independent fixture oracle.  | Service/API integration, then selected e2e | E2e tests without an independent expected-result source.          |
 
 ## 3. Phased Rollout
 
-| # | Phase | Goal | Risks covered | Test types | Status | Change folder |
-|---|---|---|---|---|---|---|
-| 1 | Test foundation and data protection | Establish the runner and prove data isolation and relation integrity before expanding coverage. | R3, R5 | Integration with Supabase/RLS | change opened | testing-foundation-and-data-protection |
-| 2 | Recipe persistence and tag deduplication | Prove reliable recipe persistence, server validation, and canonical tag creation. | R1, R2, R4 | API/service integration | not started | — |
-| 3 | Search result correctness | Prove that combined taxonomy and ingredient queries return only valid matches. | R6 | Service/API integration; selected e2e | not started | — |
-| 4 | Quality gates | Make critical tests part of local and CI quality gates. | R1-R6 | Test runner, lint, build, critical-flow checks | not started | — |
+| #   | Phase                                    | Goal                                                                                            | Risks covered | Test types                                     | Status        | Change folder                          |
+| --- | ---------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------- | ---------------------------------------------- | ------------- | -------------------------------------- |
+| 1   | Test foundation and data protection      | Establish the runner and prove data isolation and relation integrity before expanding coverage. | R3, R5        | Integration with Supabase/RLS                  | change opened | testing-foundation-and-data-protection |
+| 2   | Recipe persistence and tag deduplication | Prove reliable recipe persistence, server validation, and canonical tag creation.               | R1, R2, R4    | API/service integration                        | not started   | —                                      |
+| 3   | Search result correctness                | Prove that combined taxonomy and ingredient queries return only valid matches.                  | R6            | Service/API integration; selected e2e          | not started   | —                                      |
+| 4   | Quality gates                            | Make critical tests part of local and CI quality gates.                                         | R1-R6         | Test runner, lint, build, critical-flow checks | not started   | —                                      |
 
 Phase order is risk-first: protect ownership and database integrity, then verify writes and deduplication, then verify the product's north-star search flow, and finally make the checks enforceable. No AI-native phase is proposed because the current risks have cheaper deterministic signals.
 
@@ -53,6 +53,7 @@ Phase order is risk-first: protect ownership and database integrity, then verify
 - Authentication: existing mechanisms are accepted and not a rollout priority; recipe ownership and data isolation remain in scope.
 
 **Stack grounding tools (current session):**
+
 - Docs: not available in current session — recommendations use local manifest and repository rules; checked: 2026-09-10
 - Search: not available in current session — no dedicated search MCP exposed; checked: 2026-09-10
 - Runtime/browser: browser/runtime tools available — possible future e2e verification, not used for this plan; checked: 2026-09-10
@@ -60,17 +61,17 @@ Phase order is risk-first: protect ownership and database integrity, then verify
 
 ## 5. Quality Gates
 
-| Gate | Purpose | Current state | Rollout requirement |
-|---|---|---|---|
-| Lint | Catch type-aware and style regressions. | Present as `npm run lint`. | Keep required throughout. |
-| Type/build | Verify Astro sync, TypeScript, and production compilation. | Present through `npx astro sync` and `npm run build`. | Keep required throughout. |
-| Unit/integration | Catch domain, persistence, ownership, and API regressions. | Not configured. | Required after Phase 1 and expanded through Phase 3. |
-| Critical-flow e2e | Verify only user-visible flows not covered cheaply below. | Not configured. | Required after Phase 3 only for the critical search flow if integration coverage is insufficient. |
-| Post-edit hook | Provide fast local feedback. | No dedicated test hook. | Recommended local improvement; not a CI substitute. |
+| Gate              | Purpose                                                    | Current state                                         | Rollout requirement                                                                               |
+| ----------------- | ---------------------------------------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Lint              | Catch type-aware and style regressions.                    | Present as `npm run lint`.                            | Keep required throughout.                                                                         |
+| Type/build        | Verify Astro sync, TypeScript, and production compilation. | Present through `npx astro sync` and `npm run build`. | Keep required throughout.                                                                         |
+| Unit/integration  | Catch domain, persistence, ownership, and API regressions. | Not configured.                                       | Required after Phase 1 and expanded through Phase 3.                                              |
+| Critical-flow e2e | Verify only user-visible flows not covered cheaply below.  | Not configured.                                       | Required after Phase 3 only for the critical search flow if integration coverage is insufficient. |
+| Post-edit hook    | Provide fast local feedback.                               | No dedicated test hook.                               | Recommended local improvement; not a CI substitute.                                               |
 
 ## 6. Cookbook
 
-- Recipe ownership and relation integrity: TBD — see §3 Phase 1.
+- Recipe ownership and relation integrity: Add tests in `src/lib/services/__tests__/recipe.service.integration.test.ts`, using `createTestContext()` from `src/lib/services/__tests__/helpers.ts` for two authenticated users and cleanup. Run with `npm run test:run` after starting local Supabase and setting `SUPABASE_URL`, `SUPABASE_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`.
 - Recipe persistence and partial tag assignment: TBD — see §3 Phase 2.
 - Canonical taxonomy creation and duplicate prevention: TBD — see §3 Phase 2.
 - Search by combined taxonomy and ingredient conditions: TBD — see §3 Phase 3.
