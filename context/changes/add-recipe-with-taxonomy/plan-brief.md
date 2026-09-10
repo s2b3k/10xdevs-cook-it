@@ -16,19 +16,20 @@ Zalogowany użytkownik otwiera `/recipes/new`, wypełnia tytuł, składniki, ins
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) | Source |
-|---|---|---|---|
-| API pattern | JSON fetch (nie formData + redirect) | Dynamiczny taxonomy UX wymaga React-controlled flow, nie natywnego form submit | Plan |
-| Taxonomy creation | Inline create-on-enter (POST /api/taxonomy) | Baza tagów jest pusta na starcie — select-only uniemożliwiłby użycie | Plan |
-| Taxonomy upsert | upsert/fallback select przy 23505 | Unique index na lower(name) gwarantuje że ten sam tag nie zduplikuje się | Plan |
-| Walidacja | Zod server-side (nowa zależność) | Brak serwerowej walidacji kształtu danych byłby tech debtem od S-01 | Plan |
-| Post-submit | Redirect na /recipes (prosta lista SSR) | Użytkownik musi zobaczyć efekt swojej pracy — stub bez listy jest bezużyteczny | Plan |
-| Form scope | Wszystkie pola + photo_url | Unika tech debtu; photo_url jest prostym URL inputem, nie uploadem | Plan |
-| Errors | Inline field errors + global banner | Formularz wielopolowy potrzebuje precyzyjnych komunikatów | Plan |
+| Decision          | Choice                                      | Why (1 sentence)                                                               | Source |
+| ----------------- | ------------------------------------------- | ------------------------------------------------------------------------------ | ------ |
+| API pattern       | JSON fetch (nie formData + redirect)        | Dynamiczny taxonomy UX wymaga React-controlled flow, nie natywnego form submit | Plan   |
+| Taxonomy creation | Inline create-on-enter (POST /api/taxonomy) | Baza tagów jest pusta na starcie — select-only uniemożliwiłby użycie           | Plan   |
+| Taxonomy upsert   | upsert/fallback select przy 23505           | Unique index na lower(name) gwarantuje że ten sam tag nie zduplikuje się       | Plan   |
+| Walidacja         | Zod server-side (nowa zależność)            | Brak serwerowej walidacji kształtu danych byłby tech debtem od S-01            | Plan   |
+| Post-submit       | Redirect na /recipes (prosta lista SSR)     | Użytkownik musi zobaczyć efekt swojej pracy — stub bez listy jest bezużyteczny | Plan   |
+| Form scope        | Wszystkie pola + photo_url                  | Unika tech debtu; photo_url jest prostym URL inputem, nie uploadem             | Plan   |
+| Errors            | Inline field errors + global banner         | Formularz wielopolowy potrzebuje precyzyjnych komunikatów                      | Plan   |
 
 ## Scope
 
 **In scope:**
+
 - `POST/GET /api/recipes` (JSON)
 - `GET/POST /api/taxonomy` (autocomplete + create)
 - `POST /api/recipes/[id]/taxonomy` (assign)
@@ -39,6 +40,7 @@ Zalogowany użytkownik otwiera `/recipes/new`, wypełnia tytuł, składniki, ins
 - Middleware: `/recipes` → PROTECTED_ROUTES
 
 **Out of scope:**
+
 - Edycja i usuwanie przepisu (S-03)
 - Strona szczegółów `/recipes/[id]` (S-02)
 - Wyszukiwanie i autocomplete po składnikach (S-02)
@@ -61,11 +63,11 @@ TaxonomyTagInput.tsx
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-|---|---|---|
-| 1. API Backend | JSON routes, zod validation, taxonomy service | Upsert logic dla taxonomy unique constraint |
-| 2. Pages & React Components | Form, tag input, list page, routing | Taxonomy UX (debounce, create flow, chips) |
-| 3. Integration Verification | Lint + build + E2E manual test | Regresja w auth flow |
+| Phase                       | What it delivers                              | Key risk                                    |
+| --------------------------- | --------------------------------------------- | ------------------------------------------- |
+| 1. API Backend              | JSON routes, zod validation, taxonomy service | Upsert logic dla taxonomy unique constraint |
+| 2. Pages & React Components | Form, tag input, list page, routing           | Taxonomy UX (debounce, create flow, chips)  |
+| 3. Integration Verification | Lint + build + E2E manual test                | Regresja w auth flow                        |
 
 **Prerequisites:** F-01 wdrożony (migracje na cloud: `npx supabase db push --linked`)
 **Estimated effort:** ~2 sesje, 3 fazy
