@@ -92,6 +92,7 @@ Instalacja zod, taxonomy service, JSON API routes dla recipe CRUD i taxonomy man
 **Intent**: Endpoint do tworzenia przepisu (POST) i listowania przepisów zalogowanego użytkownika (GET). Oba zwracają JSON.
 
 **Contract**:
+
 - `GET` — odpowiedź `{ data: Recipe[] }` lub `{ error: string }` z HTTP 401 gdy brak auth.
 - `POST` — body JSON walidowane przez `CreateRecipeBodySchema`; odpowiedź `{ data: Recipe }` (201) lub `{ error: string, fields?: Record<string,string> }`. Używa `createRecipeService(supabase, userId).createRecipe(input)`. Przy błędzie domenowym z `RecipeDomainError.code === 'RECIPE_VALIDATION'` zwraca 400 z `fields`.
 
@@ -102,6 +103,7 @@ Instalacja zod, taxonomy service, JSON API routes dla recipe CRUD i taxonomy man
 **Intent**: Autocomplete (GET z query param `?q=`) i tworzenie nowego tagu (POST).
 
 **Contract**:
+
 - `GET` — query param `q` (string, opcjonalny), odpowiedź `{ data: Taxonomy[] }`. Gdy brak auth: 401.
 - `POST` — body JSON walidowany przez `CreateTaxonomyBodySchema`; wywołuje `createOrGetTaxonomy`; odpowiedź `{ data: Taxonomy }` (201 gdy nowy, 200 gdy istniejący).
 
@@ -262,6 +264,7 @@ Brak dedykowanego test runnera w projekcie. Testowanie przez lint + build + manu
 - Error model: `src/lib/services/recipe.errors.ts`
 - Auth API pattern: `src/pages/api/auth/signup.ts`
 - Auth React form pattern: `src/components/auth/SignUpForm.tsx`
+
 ## Progress
 
 > Convention: `- [ ]` pending, `- [x]` done. Append ` — <commit sha>` when a step lands. Do not rename step titles.

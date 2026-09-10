@@ -17,15 +17,15 @@ Developers can run a deterministic Vitest suite against local Supabase with two 
 
 ## Key Decisions Made
 
-| Decision | Choice | Why | Source |
-|---|---|---|---|
-| Test boundary | Service-level database integration | Gives direct RLS and constraint signal without browser/server harness overhead | Research / Plan |
-| User fixtures | Two real authenticated users per suite | Directly exercises `auth.uid()` and avoids false confidence from service-role bypass | Research / Plan |
-| Error scope | Preserve current API statuses; assert service domain errors | Keeps Phase 1 focused and avoids bundling an API contract change | Research / Plan |
-| Runner | Vitest with `test` and `test:run` scripts | Fits the TypeScript/ESM stack and supports future phases | Research |
-| Cleanup | Explicit teardown plus unique fixture names | Prevents order dependence without bypassing RLS assertions | Plan |
-| R5 coverage | Duplicate, FK, cascade, and restrict cases | Covers every relation guarantee identified in the research | Research / Plan |
-| Environment | Fail fast when local Supabase is unavailable | Prevents a green rollout with untested RLS | Plan |
+| Decision      | Choice                                                      | Why                                                                                  | Source          |
+| ------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------------------ | --------------- |
+| Test boundary | Service-level database integration                          | Gives direct RLS and constraint signal without browser/server harness overhead       | Research / Plan |
+| User fixtures | Two real authenticated users per suite                      | Directly exercises `auth.uid()` and avoids false confidence from service-role bypass | Research / Plan |
+| Error scope   | Preserve current API statuses; assert service domain errors | Keeps Phase 1 focused and avoids bundling an API contract change                     | Research / Plan |
+| Runner        | Vitest with `test` and `test:run` scripts                   | Fits the TypeScript/ESM stack and supports future phases                             | Research        |
+| Cleanup       | Explicit teardown plus unique fixture names                 | Prevents order dependence without bypassing RLS assertions                           | Plan            |
+| R5 coverage   | Duplicate, FK, cascade, and restrict cases                  | Covers every relation guarantee identified in the research                           | Research / Plan |
+| Environment   | Fail fast when local Supabase is unavailable                | Prevents a green rollout with untested RLS                                           | Plan            |
 
 ## Scope
 
@@ -51,12 +51,12 @@ Vitest runs Node-based integration tests against local Supabase. Helpers create 
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-|---|---|---|
-| 1. Foundation | Runner, environment guard, authenticated fixtures, cleanup | Tests must not bypass RLS |
-| 2. R3 isolation | Cross-account read and mutation protection | Logged-in does not imply ownership |
-| 3. R5 integrity | Duplicate, FK, cascade, and restrict coverage | Relations must not become invalid or orphaned |
-| 4. Handoff | Quality gates and cookbook instructions | Coverage must remain runnable and discoverable |
+| Phase           | What it delivers                                           | Key risk                                       |
+| --------------- | ---------------------------------------------------------- | ---------------------------------------------- |
+| 1. Foundation   | Runner, environment guard, authenticated fixtures, cleanup | Tests must not bypass RLS                      |
+| 2. R3 isolation | Cross-account read and mutation protection                 | Logged-in does not imply ownership             |
+| 3. R5 integrity | Duplicate, FK, cascade, and restrict coverage              | Relations must not become invalid or orphaned  |
+| 4. Handoff      | Quality gates and cookbook instructions                    | Coverage must remain runnable and discoverable |
 
 **Prerequisites:** Docker, local Supabase, Node.js 22.14.0, and local Supabase URL/key values.
 **Estimated effort:** ~2-3 implementation sessions across four focused phases.

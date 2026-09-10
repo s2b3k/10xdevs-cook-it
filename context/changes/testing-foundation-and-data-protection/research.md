@@ -71,16 +71,16 @@ There is no test runner, test configuration, test file, or CI test command. The 
 
 ## Recommended Phase 1 Test Matrix
 
-| Area | Setup and action | Assertion that provides signal |
-|---|---|---|
-| R3 read isolation | User A creates a recipe; User B lists/reads recipes | B cannot observe A's recipe, and the response does not leak its relation rows |
-| R3 mutation isolation | B updates or deletes A's recipe | Operation cannot change or remove A's row; assert the actual domain/API error contract |
-| R3 relation isolation | B assigns or deletes a taxonomy relation for A's recipe | RLS blocks the relation mutation and no relation is created or removed |
-| R5 duplicate relation | Assign the same taxonomy twice to one recipe | Second operation produces the conflict path; exactly one relation remains |
-| R5 missing references | Assign a fake recipe or taxonomy ID | Operation fails with integrity mapping and leaves no relation |
-| R5 recipe cascade | Assign relations, then delete the recipe | Recipe and its relations disappear; taxonomy rows remain |
-| R5 taxonomy restrict | Assign a taxonomy, then attempt to delete the taxonomy directly | Delete is rejected and the existing relation remains |
-| R5 category uniqueness | Create equal names in same and different categories | Same normalized tuple resolves to one record; different categories remain distinct |
+| Area                   | Setup and action                                                | Assertion that provides signal                                                         |
+| ---------------------- | --------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| R3 read isolation      | User A creates a recipe; User B lists/reads recipes             | B cannot observe A's recipe, and the response does not leak its relation rows          |
+| R3 mutation isolation  | B updates or deletes A's recipe                                 | Operation cannot change or remove A's row; assert the actual domain/API error contract |
+| R3 relation isolation  | B assigns or deletes a taxonomy relation for A's recipe         | RLS blocks the relation mutation and no relation is created or removed                 |
+| R5 duplicate relation  | Assign the same taxonomy twice to one recipe                    | Second operation produces the conflict path; exactly one relation remains              |
+| R5 missing references  | Assign a fake recipe or taxonomy ID                             | Operation fails with integrity mapping and leaves no relation                          |
+| R5 recipe cascade      | Assign relations, then delete the recipe                        | Recipe and its relations disappear; taxonomy rows remain                               |
+| R5 taxonomy restrict   | Assign a taxonomy, then attempt to delete the taxonomy directly | Delete is rejected and the existing relation remains                                   |
+| R5 category uniqueness | Create equal names in same and different categories             | Same normalized tuple resolves to one record; different categories remain distinct     |
 
 Assertions must inspect the resulting rows and error codes, not only HTTP success or row existence. Each test should clean up its users, recipes, relations, and shared taxonomy fixtures, or use unique names to avoid cross-test contamination.
 
