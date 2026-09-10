@@ -241,14 +241,14 @@ No database migration is planned. Tests consume the existing migrations and cons
 
 #### Automated
 
-- [ ] 2.1 Account B cannot read account A's recipe
-- [ ] 2.2 Account B cannot update or delete account A's recipe
-- [ ] 2.3 Account B cannot assign or remove a relation on account A's recipe
-- [ ] 2.4 Account A can access its own recipe and relation fixtures
+- [x] 2.1 Account B cannot read account A's recipe
+- [x] 2.2 Account B cannot update or delete account A's recipe
+- [x] 2.3 Account B cannot assign or remove a relation on account A's recipe
+- [x] 2.4 Account A can access its own recipe and relation fixtures
 
 #### Manual
 
-- [ ] 2.5 Removing an ownership predicate makes the R3 suite fail
+- [x] 2.5 Removing an ownership predicate makes the R3 suite fail
 
 ### Phase 3: R5 Relation-Integrity Integration Tests
 
