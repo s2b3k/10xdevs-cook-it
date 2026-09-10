@@ -267,13 +267,13 @@ No database migration is planned. Tests consume the existing migrations and cons
 
 #### Automated
 
-- [x] 4.1 `npm run test:run` passes with local Supabase running
-- [x] 4.2 `npm run lint` passes
-- [x] 4.3 `npm run build` passes
-- [x] 4.4 `npx astro sync` passes when run independently
-- [x] 4.5 Phase 1 cookbook entry is no longer TBD
+- [x] 4.1 `npm run test:run` passes with local Supabase running — 494aa3b
+- [x] 4.2 `npm run lint` passes — 494aa3b
+- [x] 4.3 `npm run build` passes — 494aa3b
+- [x] 4.4 `npx astro sync` passes when run independently — 494aa3b
+- [x] 4.5 Phase 1 cookbook entry is no longer TBD — 494aa3b
 
 #### Manual
 
-- [x] 4.6 Suite is integration-only and needs no browser or Astro server
-- [x] 4.7 Setup and cleanup work from a clean checkout
+- [x] 4.6 Suite is integration-only and needs no browser or Astro server — 494aa3b
+- [x] 4.7 Setup and cleanup work from a clean checkout — 494aa3b
