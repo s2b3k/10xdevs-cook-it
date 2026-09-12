@@ -31,7 +31,7 @@ W tym roadmapie najpierw dostarczamy walidacyjny punkt produktu, czyli najmniejs
 
 | ID   | Change ID                               | Outcome (user can ...)                                                                                       | Prerequisites | PRD refs                                                                | Status   |
 | ---- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------- | ----------------------------------------------------------------------- | -------- |
-| F-01 | recipe-domain-foundation                | (foundation) aplikacja ma minimalny model przepisu, taksonomii i wlasciciela danych gotowy pod przeplywy MVP | -             | Access Control, FR-001, FR-003                                          | ready    |
+| F-01 | recipe-domain-foundation                | (foundation) aplikacja ma minimalny model przepisu, taksonomii i wlasciciela danych gotowy pod przeplywy MVP | -             | Access Control, FR-001, FR-003                                          | done     |
 | S-01 | add-recipe-with-taxonomy                | user can add a recipe recznie lub copy-paste i zapisac podstawowe metadane taksonomiczne                     | F-01          | FR-001, FR-003, Success Criteria (Primary)                              | proposed |
 | S-02 | search-recipes-autocomplete-and-details | user can wyszukac przepis po taksonomii i skladniku, zobaczyc karty wynikow i otworzyc pelny widok           | S-01          | US-01, FR-004, FR-005, Non-Functional Requirements (search <= 1.5s p95) | done       |
 | S-03 | edit-and-delete-recipe                  | user can edytowac i usuwac istniejace przepisy bez utraty kontroli nad wlasna baza                           | S-01          | FR-002                                                                  | proposed |
@@ -70,7 +70,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** -
 - **Unknowns:** -
 - **Risk:** Bez tego fundamentu latwo rozjechac zakres i wprowadzic niespojnosci, ktore spowolnia kolejne pionowe dostawy.
-- **Status:** ready
+- **Status:** done
 
 ## Slices
 
@@ -138,4 +138,5 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 ## Done
 
+- **F-01: (foundation) model przepisu, metadanych taksonomicznych i wlasciciela danych jest spojny i gotowy do uzycia przez kolejne przeplywy.** — Archived 2026-09-12 → `context/archive/2026-05-26-recipe-domain-foundation/`. Lesson: —.
 - **S-02: user can wyszukac przepis po taksonomii i skladniku, zobaczyc karty wynikow i otworzyc pelny widok** — Archived 2026-09-12 → `context/archive/2026-09-12-search-recipes-autocomplete-and-details/`. Lesson: —.
