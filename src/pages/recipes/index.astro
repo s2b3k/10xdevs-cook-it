@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Topbar from "@/components/Topbar.astro";
+import RecipeSearch from "@/components/recipes/RecipeSearch";
 import { createClient } from "@/lib/supabase";
 import { createRecipeService } from "@/lib/services/recipe.service";
 
@@ -41,34 +42,7 @@ const recipes = user && supabase ? await createRecipeService(supabase, user.id).
         ) : null
       }
 
-      {
-        recipes.length > 0 ? (
-          <div class="grid gap-4 md:grid-cols-2">
-            {recipes.map((recipe) => (
-              <article class="rounded-2xl border border-white/10 bg-white/8 p-5 backdrop-blur-sm">
-                <h2 class="text-xl font-semibold text-white">{recipe.title}</h2>
-                <p class="mt-3 text-sm leading-6 text-blue-100/70">
-                  {recipe.lead ?? "No lead yet. Open this recipe in the next slice to add more detail and context."}
-                </p>
-              </article>
-            ))}
-          </div>
-        ) : (
-          <div class="rounded-2xl border border-dashed border-white/15 bg-white/5 p-8 text-center backdrop-blur-sm">
-            <h2 class="text-xl font-semibold text-white">No recipes yet</h2>
-            <p class="mx-auto mt-3 max-w-lg text-sm leading-6 text-blue-100/70">
-              Start with one recipe you know well. Once it is here, the next slice will make it searchable by tags and
-              ingredients.
-            </p>
-            <a
-              href="/recipes/new"
-              class="mt-6 inline-flex items-center rounded-lg border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/20"
-            >
-              Add your first recipe
-            </a>
-          </div>
-        )
-      }
+      {(<RecipeSearch client:load initialRecipes={recipes} />)}
     </div>
   </div>
 </Layout>

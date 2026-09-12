@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { CreateRecipeInput, Recipe, SearchRecipesInput, UpdateRecipeInput, UUID } from "@/types";
+import type { CreateRecipeInput, Recipe, SearchRecipesInput, Taxonomy, UpdateRecipeInput, UUID } from "@/types";
 import { RECIPE_ERROR_CODES, RecipeDomainError, mapSupabaseError } from "@/lib/services/recipe.errors";
 
 interface RecipeRow {
@@ -17,6 +17,15 @@ interface RecipeRow {
 interface RecipeTaxonomyRow {
   recipe_id: string;
   taxonomy_id: string;
+}
+
+interface RecipeTaxonomyWithTaxonomyRow {
+  taxonomy: {
+    id: string;
+    name: string;
+    category: string | null;
+    created_at: string;
+  } | null;
 }
 
 function toRecipe(row: RecipeRow): Recipe {
@@ -56,6 +65,7 @@ export interface RecipeService {
   listRecipes(): Promise<Recipe[]>;
   searchRecipes(input?: SearchRecipesInput): Promise<Recipe[]>;
   getRecipe(recipeId: UUID): Promise<Recipe>;
+  listTaxonomiesForRecipe(recipeId: UUID): Promise<Taxonomy[]>;
   updateRecipe(recipeId: UUID, input: UpdateRecipeInput): Promise<Recipe>;
   deleteRecipe(recipeId: UUID): Promise<void>;
   assignTaxonomy(recipeId: UUID, taxonomyId: UUID): Promise<void>;
@@ -187,6 +197,34 @@ export function createRecipeService(supabase: SupabaseClient, userId: UUID): Rec
     return toRecipe(data);
   }
 
+  async function listTaxonomiesForRecipe(recipeId: UUID): Promise<Taxonomy[]> {
+    const { data, error } = await supabase
+      .from("recipe_taxonomy")
+      .select("taxonomy(id, name, category, created_at)")
+      .eq("recipe_id", recipeId)
+      .overrideTypes<RecipeTaxonomyWithTaxonomyRow[], { merge: false }>();
+
+    if (error) {
+      throw (
+        mapSupabaseError(error, RECIPE_ERROR_CODES.unknown) ??
+        new RecipeDomainError(RECIPE_ERROR_CODES.unknown, error.message, error)
+      );
+    }
+
+    return data.flatMap(({ taxonomy }) =>
+      taxonomy
+        ? [
+            {
+              id: taxonomy.id,
+              name: taxonomy.name,
+              category: taxonomy.category,
+              createdAt: taxonomy.created_at,
+            },
+          ]
+        : [],
+    );
+  }
+
   async function updateRecipe(recipeId: UUID, input: UpdateRecipeInput): Promise<Recipe> {
     const patch: Record<string, string | null> = {};
 
@@ -255,6 +293,7 @@ export function createRecipeService(supabase: SupabaseClient, userId: UUID): Rec
     listRecipes,
     searchRecipes,
     getRecipe,
+    listTaxonomiesForRecipe,
     updateRecipe,
     deleteRecipe,
     assignTaxonomy,

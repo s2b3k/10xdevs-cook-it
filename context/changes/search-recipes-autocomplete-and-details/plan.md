@@ -289,28 +289,28 @@ No migration is expected for the selected MVP approach. The existing recipes and
 
 #### Automated
 
-- [x] 1.1 Service tests cover all filter combinations, normalization, ordering, duplicates, and user isolation
-- [x] 1.2 API tests cover query validation, empty results, auth, and error mapping
-- [x] 1.3 `npm run typecheck` passes after service, schema, and API changes
-- [x] 1.4 `npm run lint` passes for Phase 1 files
+- [x] 1.1 Service tests cover all filter combinations, normalization, ordering, duplicates, and user isolation — 9e31bc5
+- [x] 1.2 API tests cover query validation, empty results, auth, and error mapping — 9e31bc5
+- [x] 1.3 `npm run typecheck` passes after service, schema, and API changes — 9e31bc5
+- [x] 1.4 `npm run lint` passes for Phase 1 files — 9e31bc5
 
 #### Manual
 
-- [x] 1.5 API behavior is verified manually for filtered, empty, and invalid queries
+- [x] 1.5 API behavior is verified manually for filtered, empty, and invalid queries — 9e31bc5
 
 ### Phase 2: Search UI and SSR Recipe Details
 
 #### Automated
 
-- [ ] 2.1 `npm run typecheck` passes after UI and detail route changes
-- [ ] 2.2 `npm run lint` passes for Phase 2 files
-- [ ] 2.3 `npm run build` succeeds with the dynamic SSR route
+- [x] 2.1 `npm run typecheck` passes after UI and detail route changes
+- [x] 2.2 `npm run lint` passes for Phase 2 files
+- [x] 2.3 `npm run build` succeeds with the dynamic SSR route
 
 #### Manual
 
-- [ ] 2.4 Search controls, debounce, loading, empty, error, and clear states are verified in the browser
-- [ ] 2.5 Search result navigation and complete recipe details are verified in the browser
-- [ ] 2.6 Missing or inaccessible recipe details show the intended controlled state
+- [x] 2.4 Search controls, debounce, loading, empty, error, and clear states are verified in the browser
+- [x] 2.5 Search result navigation and complete recipe details are verified in the browser
+- [x] 2.6 Missing or inaccessible recipe details show the intended controlled state
 
 ### Phase 3: Integration, E2E, and Performance Verification
 
