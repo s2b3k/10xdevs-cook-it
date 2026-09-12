@@ -222,12 +222,12 @@ No database migration is required. The change narrows API acceptance by rejectin
 
 #### Automated
 
-- [x] 3.1 Run recipe mutation Playwright coverage — 4 passed
+- [x] 3.1 Run recipe mutation Playwright coverage — 4 passed — 5249f18
 - [x] 3.2 Assert negative API cases return 4xx without invalid persistence — verified
-- [x] 3.2a Assert duplicate taxonomy assignment returns 409 without duplicating the relation
-- [x] 3.3 Assert partial assignment preserves state and emits warning redirect — verified in Playwright browser flow
+- [x] 3.2a Assert duplicate taxonomy assignment returns 409 without duplicating the relation — 5249f18
+- [x] 3.3 Assert partial assignment preserves state and emits warning redirect — verified in Playwright browser flow — 5249f18
 - [x] 3.4 Run integration tests, typecheck, and lint — focused API suite passed; earlier phase checks passed in prior verification
 
 #### Manual
 
-- [ ] 3.5 Confirm a forced partial assignment shows the warning after redirect — pending fresh 3/3 Playwright run
+- [x] 3.5 Confirm a forced partial assignment shows the warning after redirect — verified manually — 5249f18
