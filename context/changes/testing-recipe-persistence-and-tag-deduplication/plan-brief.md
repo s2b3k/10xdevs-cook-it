@@ -52,7 +52,7 @@ The server contract is aligned first at Zod and the taxonomy route. A Vitest int
 | 2. Canonical persistence    | Real database proof of canonical taxonomy creation    | Leaking test fixtures or testing normalization only    |
 | 3. API and partial outcomes | Full R4 matrix and warning redirect coverage          | Brittle browser setup or incomplete cleanup            |
 
-**Prerequisites:** Local Supabase running; `SUPABASE_URL`, `SUPABASE_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` configured; authenticated Playwright storage state available.
+**Prerequisites:** A configured Supabase project reachable over HTTP (local Docker Supabase is also supported); `SUPABASE_URL`, `SUPABASE_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` must target the same project; authenticated Playwright storage state in `auth.json` must be generated against that project.
 **Estimated effort:** ~2-3 sessions across 3 phases.
 
 ## Open Risks & Assumptions
