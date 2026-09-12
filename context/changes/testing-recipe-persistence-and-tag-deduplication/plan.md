@@ -208,13 +208,13 @@ No database migration is required. The change narrows API acceptance by rejectin
 
 #### Automated
 
-- [x] 2.1 Run focused taxonomy service integration test
-- [x] 2.2 Assert equivalent taxonomy writes return one ID and one database row
-- [x] 2.3 Run npm run typecheck
+- [x] 2.1 Run focused taxonomy service integration test — eb75182
+- [x] 2.2 Assert equivalent taxonomy writes return one ID and one database row — eb75182
+- [x] 2.3 Run npm run typecheck — eb75182
 
 #### Manual
 
-- [ ] 2.4 Confirm the taxonomy test uses local Supabase without mocks
+- [x] 2.4 Confirm the taxonomy test uses local Supabase without mocks — eb75182
 
 ### Phase 3: Verify API Outcomes and Partial Tag Assignment
 
