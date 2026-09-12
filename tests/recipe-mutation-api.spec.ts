@@ -8,6 +8,12 @@ interface RecipeResponse {
   data: { id: string; title: string };
 }
 
+interface TaxonomyResponse {
+  data: { id: string; name: string };
+}
+
+type TaxonomyFixture = TaxonomyResponse["data"];
+
 function createAdminClient() {
   const url = process.env.SUPABASE_URL;
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -145,11 +151,81 @@ test("rejects malformed and invalid taxonomy-assignment payloads without persist
   }
 });
 
+test("rejects duplicate taxonomy assignment without duplicating the relation", async ({ page }) => {
+  const suffix = Date.now();
+  const createResponse = await page.request.post("/api/recipes", {
+    data: {
+      title: `Duplicate taxonomy recipe ${suffix}`,
+      ingredients: "Tomatoes",
+      instructions: "Cook them.",
+    },
+  });
+  expect(createResponse.status()).toBe(201);
+  const recipe = ((await createResponse.json()) as RecipeResponse).data;
+
+  const taxonomyResponse = await page.request.post("/api/taxonomy", {
+    data: { name: `Duplicate taxonomy ${suffix}` },
+  });
+  expect(taxonomyResponse.status()).toBe(201);
+  const taxonomy = ((await taxonomyResponse.json()) as TaxonomyResponse).data;
+  const admin = createAdminClient();
+
+  try {
+    const firstAssignment = await page.request.post(`/api/recipes/${recipe.id}/taxonomy`, {
+      data: { taxonomyId: taxonomy.id },
+    });
+    expect(firstAssignment.status()).toBe(200);
+
+    const duplicateAssignment = await page.request.post(`/api/recipes/${recipe.id}/taxonomy`, {
+      data: { taxonomyId: taxonomy.id },
+    });
+    expect(duplicateAssignment.status()).toBe(409);
+
+    const { count, error } = await admin
+      .from("recipe_taxonomy")
+      .select("taxonomy_id", { count: "exact", head: true })
+      .eq("recipe_id", recipe.id)
+      .eq("taxonomy_id", taxonomy.id);
+
+    expect(error).toBeNull();
+    expect(count).toBe(1);
+  } finally {
+    await admin.from("recipe_taxonomy").delete().eq("recipe_id", recipe.id);
+    await admin.from("recipes").delete().eq("id", recipe.id);
+    await admin.from("taxonomy").delete().eq("id", taxonomy.id);
+  }
+});
+
 test("redirects with a warning when one taxonomy assignment fails after creation succeeds", async ({ page }) => {
   const recipeTitle = `Partial assignment recipe ${Date.now()}`;
   const tagOne = `Partial tag ${Date.now()}-one`;
   const tagTwo = `Partial tag ${Date.now()}-two`;
+  const admin = createAdminClient();
+  const taxonomies: TaxonomyFixture[] = [];
   let taxonomyAssignmentCalls = 0;
+
+  for (const tagName of [tagOne, tagTwo]) {
+    const taxonomyResponse = await page.request.post("/api/taxonomy", {
+      data: { name: tagName },
+    });
+    expect([200, 201]).toContain(taxonomyResponse.status());
+    taxonomies.push(((await taxonomyResponse.json()) as TaxonomyResponse).data);
+  }
+
+  await page.route("**/api/taxonomy**", async (route) => {
+    if (route.request().method() !== "GET") {
+      await route.continue();
+      return;
+    }
+
+    const query = new URL(route.request().url()).searchParams.get("q")?.toLowerCase() ?? "";
+    const matches = taxonomies.filter((taxonomy) => taxonomy.name.toLowerCase().includes(query));
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ data: matches }),
+    });
+  });
 
   await page.route("**/api/recipes/*/taxonomy", async (route) => {
     taxonomyAssignmentCalls += 1;
@@ -165,41 +241,58 @@ test("redirects with a warning when one taxonomy assignment fails after creation
     });
   });
 
-  await page.goto("/recipes/new");
-  await page.getByLabel("Title").fill(recipeTitle);
-  await page.getByLabel("Ingredients").fill("Tomatoes\nOnion\nOlive oil");
-  await page.getByLabel("Instructions").fill("Cook the onion, add tomatoes, and simmer.");
+  try {
+    await page.goto("/recipes/new");
+    await page.waitForLoadState("networkidle");
+    await page.getByLabel("Title").fill(recipeTitle);
+    await page.getByLabel("Ingredients").fill("Tomatoes\nOnion\nOlive oil");
+    await page.getByLabel("Instructions").fill("Cook the onion, add tomatoes, and simmer.");
 
-  for (const tagName of [tagOne, tagTwo]) {
-    const taxonomyField = page.getByLabel("Taxonomy tags");
-    await taxonomyField.fill(tagName);
-    await taxonomyField.press("Enter");
-    await expect(page.getByText(tagName)).toBeVisible();
+    for (const tagName of [tagOne, tagTwo]) {
+      const taxonomyField = page.getByLabel("Taxonomy tags");
+      await taxonomyField.fill(tagName);
+      const suggestion = page.getByRole("button", { name: tagName, exact: true });
+      await expect(suggestion).toBeVisible();
+      await suggestion.click();
+      await expect(page.getByText(tagName, { exact: true })).toBeVisible();
+    }
+
+    await page.getByRole("button", { name: "Save recipe" }).click();
+
+    await expect(page).toHaveURL(/\/recipes\?warning=/);
+    await expect(page.getByText(/Recipe was saved, but/i)).toBeVisible();
+
+    const { data: recipe, error: recipeError } = await admin
+      .from("recipes")
+      .select("id")
+      .eq("title", recipeTitle)
+      .single();
+
+    expect(recipeError).toBeNull();
+    expect(recipe).not.toBeNull();
+    if (!recipe) {
+      throw new Error("Expected the created recipe to be persisted.");
+    }
+
+    const { count, error: relationError } = await admin
+      .from("recipe_taxonomy")
+      .select("taxonomy_id", { count: "exact", head: true })
+      .eq("recipe_id", recipe.id);
+
+    expect(relationError).toBeNull();
+    expect(count).toBe(1);
+  } finally {
+    const { data: recipe } = await admin.from("recipes").select("id").eq("title", recipeTitle).maybeSingle();
+    if (recipe) {
+      await admin.from("recipe_taxonomy").delete().eq("recipe_id", recipe.id);
+      await admin.from("recipes").delete().eq("id", recipe.id);
+    }
+    await admin
+      .from("taxonomy")
+      .delete()
+      .in(
+        "id",
+        taxonomies.map((taxonomy) => taxonomy.id),
+      );
   }
-
-  await page.getByRole("button", { name: "Save recipe" }).click();
-
-  await expect(page).toHaveURL(/\/recipes\?warning=/);
-  await expect(page.getByText(/Recipe was saved, but/i)).toBeVisible();
-
-  const admin = createAdminClient();
-  const { data: recipe, error: recipeError } = await admin
-    .from("recipes")
-    .select("id")
-    .eq("title", recipeTitle)
-    .single();
-
-  expect(recipeError).toBeNull();
-  expect(recipe).not.toBeNull();
-
-  const { count, error: relationError } = await admin
-    .from("recipe_taxonomy")
-    .select("taxonomy_id", { count: "exact", head: true })
-    .eq("recipe_id", recipe.id);
-
-  expect(relationError).toBeNull();
-  expect(count).toBe(1);
-
-  await admin.from("recipe_taxonomy").delete().eq("recipe_id", recipe.id);
-  await admin.from("recipes").delete().eq("id", recipe.id);
 });

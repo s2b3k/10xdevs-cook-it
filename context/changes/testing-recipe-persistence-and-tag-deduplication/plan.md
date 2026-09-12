@@ -101,7 +101,7 @@ Add database-backed proof that equivalent tag writes return one canonical taxono
 
 #### Automated Verification:
 
-- `npm run test:run -- src/lib/services/__tests__/taxonomy.service.integration.test.ts` passes with local Supabase and required test credentials.
+- `npm run test:run -- src/lib/services/__tests__/taxonomy.service.integration.test.ts` passes against the configured Supabase project over HTTP or local Docker, with required test credentials.
 - The test asserts identical taxonomy IDs and an unchanged database row count for equivalent writes.
 - `npm run typecheck` passes.
 
@@ -127,7 +127,7 @@ Prove the public HTTP contract rejects invalid input and that partial assignment
 
 **Intent**: Extend the existing authenticated request suite with independent negative requests and state inspection for R2 and R4.
 
-**Contract**: Cover malformed JSON, missing required fields, wrong primitive types, whitespace-only values, invalid UUIDs, unexpected keys, and nonexistent taxonomy references. Each request asserts its `4xx` response and, where applicable, verifies via the admin client that no invalid relation or extra record was persisted. Tests use unique suffixes and `finally` cleanup.
+**Contract**: Cover malformed JSON, missing required fields, wrong primitive types, whitespace-only values, invalid UUIDs, unexpected keys, nonexistent taxonomy references, and duplicate taxonomy assignment. Each request asserts its planned `4xx` response and, where applicable, verifies via the admin client that no invalid relation or extra record was persisted; duplicate assignment must return `409` and leave one relation. Tests use unique suffixes and `finally` cleanup.
 
 #### 2. Add Recipe Form Partial-Success Scenario
 
@@ -141,8 +141,10 @@ Prove the public HTTP contract rejects invalid input and that partial assignment
 
 #### Automated Verification:
 
-- `npx playwright test tests/recipe-mutation-api.spec.ts` passes against the configured authenticated local application.
+- `npx playwright test tests/recipe-mutation-api.spec.ts` passes against the configured authenticated application; `auth.json` and the Supabase environment variables must target the same project.
+- The focused Playwright suite must pass all 3 tests in one fresh run; taxonomy creation and selection must be synchronized on an observable response or selected-tag state before the form is submitted.
 - Negative API cases return the planned `4xx` statuses and leave no invalid persistence.
+- Duplicate taxonomy assignment returns `409` through the authenticated public API and leaves exactly one relation.
 - The partial-assignment scenario proves persisted partial state and the warning redirect query signal.
 - `npm run test:run`, `npm run typecheck`, and `npm run lint` pass with local Supabase credentials configured.
 
@@ -220,11 +222,12 @@ No database migration is required. The change narrows API acceptance by rejectin
 
 #### Automated
 
-- [x] 3.1 Run recipe mutation Playwright coverage — verified with `3 passed`
+- [x] 3.1 Run recipe mutation Playwright coverage — 4 passed
 - [x] 3.2 Assert negative API cases return 4xx without invalid persistence — verified
-- [x] 3.3 Assert partial assignment preserves state and emits warning redirect — verified
+- [x] 3.2a Assert duplicate taxonomy assignment returns 409 without duplicating the relation
+- [x] 3.3 Assert partial assignment preserves state and emits warning redirect — verified in Playwright browser flow
 - [x] 3.4 Run integration tests, typecheck, and lint — focused API suite passed; earlier phase checks passed in prior verification
 
 #### Manual
 
-- [x] 3.5 Confirm a forced partial assignment shows the warning after redirect — verified in Playwright browser flow
+- [ ] 3.5 Confirm a forced partial assignment shows the warning after redirect — pending fresh 3/3 Playwright run
