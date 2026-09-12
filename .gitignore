@@ -29,3 +29,12 @@ pnpm-debug.log*
 
 # GitHub and agent tooling
 .github/
+
+# Playwright
+/auth.json
+/.playwright-cli/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
