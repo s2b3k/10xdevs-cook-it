@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { afterEach, describe, expect, it } from "vitest";
 import { RECIPE_ERROR_CODES } from "@/lib/services/recipe.errors";
 import { createRecipeService } from "@/lib/services/recipe.service";
+import { parseSearchRecipesQuery } from "@/lib/schemas/recipe.schemas";
 import type { UUID } from "@/types";
 import { createTestContext, type TestContext } from "./helpers";
 
@@ -179,5 +180,106 @@ describe("recipe service data isolation", () => {
     expect(relationError).toBeNull();
     expect(taxonomies).toEqual([{ id: taxonomy.id }]);
     expect(relations).toEqual([{ recipe_id: recipe.id, taxonomy_id: taxonomy.id }]);
+  });
+});
+
+describe("recipe service search", () => {
+  let context: TestContext | undefined;
+
+  afterEach(async () => {
+    await context?.cleanup();
+    context = undefined;
+  });
+
+  it("combines ingredient and multiple taxonomy filters with AND semantics", async () => {
+    context = await createTestContext();
+    const owner = createRecipeService(context.users[0].client, context.users[0].id);
+    const cuisine = await context.createTaxonomy(context.users[0], `Cuisine ${randomUUID()}`);
+    const meal = await context.createTaxonomy(context.users[0], `Meal ${randomUUID()}`);
+    const matchingRecipe = await context.createRecipe(context.users[0], {
+      title: "Matching recipe",
+      ingredients: "KURCZAK\nPaprika",
+    });
+    const taxonomyOnlyRecipe = await context.createRecipe(context.users[0], {
+      title: "Taxonomy only recipe",
+      ingredients: "Tofu",
+    });
+    const ingredientOnlyRecipe = await context.createRecipe(context.users[0], {
+      title: "Ingredient only recipe",
+      ingredients: "Kurczak",
+    });
+
+    await context.assignTaxonomy(context.users[0], matchingRecipe.id, cuisine.id);
+    await context.assignTaxonomy(context.users[0], matchingRecipe.id, meal.id);
+    await context.assignTaxonomy(context.users[0], taxonomyOnlyRecipe.id, cuisine.id);
+    await context.assignTaxonomy(context.users[0], ingredientOnlyRecipe.id, meal.id);
+
+    const results = await owner.searchRecipes({
+      ingredient: "  kur ",
+      taxonomyIds: [cuisine.id, meal.id],
+      limit: 10,
+    });
+
+    expect(results.map((recipe) => recipe.id)).toEqual([matchingRecipe.id]);
+  });
+
+  it("keeps results unique, ordered, bounded, and isolated by user", async () => {
+    context = await createTestContext();
+    const owner = createRecipeService(context.users[0].client, context.users[0].id);
+    const otherAccount = createRecipeService(context.users[1].client, context.users[1].id);
+    const taxonomy = await context.createTaxonomy(context.users[0], `Shared filter ${randomUUID()}`);
+    const olderRecipe = await context.createRecipe(context.users[0], {
+      title: "Older recipe",
+      ingredients: "Tomato",
+    });
+    const newerRecipe = await context.createRecipe(context.users[0], {
+      title: "Newer recipe",
+      ingredients: "Tomato",
+    });
+    const otherRecipe = await context.createRecipe(context.users[1], {
+      title: "Other account recipe",
+      ingredients: "Tomato",
+    });
+
+    await context.assignTaxonomy(context.users[0], olderRecipe.id, taxonomy.id);
+    await context.assignTaxonomy(context.users[0], newerRecipe.id, taxonomy.id);
+    await context.assignTaxonomy(context.users[1], otherRecipe.id, taxonomy.id);
+
+    const results = await owner.searchRecipes({ taxonomyIds: [taxonomy.id], limit: 1 });
+
+    expect(results).toHaveLength(1);
+    expect(results[0]?.id).toBe(newerRecipe.id);
+    await expect(otherAccount.searchRecipes({ taxonomyIds: [taxonomy.id] })).resolves.toEqual(
+      expect.arrayContaining([expect.objectContaining({ id: otherRecipe.id })]),
+    );
+  });
+
+  it("returns an empty result for unmatched filters and protects single-recipe reads", async () => {
+    context = await createTestContext();
+    const owner = createRecipeService(context.users[0].client, context.users[0].id);
+    const otherAccount = createRecipeService(context.users[1].client, context.users[1].id);
+    const recipe = await context.createRecipe(context.users[0], { ingredients: "Potato" });
+
+    await expect(owner.searchRecipes({ ingredient: "does-not-exist" })).resolves.toEqual([]);
+    await expect(owner.getRecipe(recipe.id)).resolves.toMatchObject({ id: recipe.id });
+    await expect(otherAccount.getRecipe(recipe.id)).rejects.toMatchObject({ code: RECIPE_ERROR_CODES.notFound });
+  });
+});
+
+describe("recipe search query parsing", () => {
+  it("normalizes optional values and repeated taxonomy ids", () => {
+    const taxonomyId = randomUUID();
+    const result = parseSearchRecipesQuery(new URLSearchParams({ ingredient: "  kur ", taxonomyId, limit: "5" }));
+
+    expect(result.success).toBe(true);
+    if (result.success) {
+      expect(result.data).toEqual({ ingredient: "kur", taxonomyIds: [taxonomyId], limit: 5 });
+    }
+  });
+
+  it("rejects malformed taxonomy ids and out-of-range limits", () => {
+    const result = parseSearchRecipesQuery(new URLSearchParams({ taxonomyId: "not-a-uuid", limit: "101" }));
+
+    expect(result.success).toBe(false);
   });
 });

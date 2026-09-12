@@ -289,14 +289,14 @@ No migration is expected for the selected MVP approach. The existing recipes and
 
 #### Automated
 
-- [ ] 1.1 Service tests cover all filter combinations, normalization, ordering, duplicates, and user isolation
-- [ ] 1.2 API tests cover query validation, empty results, auth, and error mapping
-- [ ] 1.3 `npm run typecheck` passes after service, schema, and API changes
-- [ ] 1.4 `npm run lint` passes for Phase 1 files
+- [x] 1.1 Service tests cover all filter combinations, normalization, ordering, duplicates, and user isolation
+- [x] 1.2 API tests cover query validation, empty results, auth, and error mapping
+- [x] 1.3 `npm run typecheck` passes after service, schema, and API changes
+- [x] 1.4 `npm run lint` passes for Phase 1 files
 
 #### Manual
 
-- [ ] 1.5 API behavior is verified manually for filtered, empty, and invalid queries
+- [x] 1.5 API behavior is verified manually for filtered, empty, and invalid queries
 
 ### Phase 2: Search UI and SSR Recipe Details
 

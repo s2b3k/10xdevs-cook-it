@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 import { createClient } from "@/lib/supabase";
 import { createRecipeService } from "@/lib/services/recipe.service";
 import { RecipeDomainError, RECIPE_ERROR_CODES } from "@/lib/services/recipe.errors";
-import { CreateRecipeBodySchema } from "@/lib/schemas/recipe.schemas";
+import { CreateRecipeBodySchema, parseSearchRecipesQuery } from "@/lib/schemas/recipe.schemas";
 
 export const GET: APIRoute = async (context) => {
   const user = context.locals.user;
@@ -23,7 +23,25 @@ export const GET: APIRoute = async (context) => {
 
   try {
     const service = createRecipeService(supabase, user.id);
-    const recipes = await service.listRecipes();
+    const searchParams = new URL(context.request.url).searchParams;
+    const parsedQuery = parseSearchRecipesQuery(searchParams);
+    if (!parsedQuery.success) {
+      const fields: Record<string, string> = {};
+      for (const issue of parsedQuery.error.issues) {
+        const key = issue.path[0]?.toString() ?? "_";
+        fields[key] = issue.message;
+      }
+      return new Response(JSON.stringify({ error: "Invalid search query", fields }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const { ingredient, taxonomyIds, limit } = parsedQuery.data;
+    const hasSearchParameters = ["ingredient", "taxonomyId", "limit"].some((parameter) => searchParams.has(parameter));
+    const recipes = hasSearchParameters
+      ? await service.searchRecipes({ ingredient, taxonomyIds, limit })
+      : await service.listRecipes();
     return new Response(JSON.stringify({ data: recipes }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
