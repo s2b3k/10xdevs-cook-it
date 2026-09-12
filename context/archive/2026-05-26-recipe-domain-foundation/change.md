@@ -1,10 +1,10 @@
 ---
 change_id: recipe-domain-foundation
 title: Fundament F-01 z roadmapy cook.it
-status: implemented
+status: archived
 created: 2026-05-26
-updated: 2026-05-26
-archived_at: null
+updated: 2026-09-12
+archived_at: 2026-09-12T14:33:59Z
 ---
 
 ## Notes

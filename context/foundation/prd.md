@@ -74,6 +74,15 @@ Rodzic planujący domowe posiłki dla rodziny. Najczęściej sięga po produkt w
   > Socrates: Counter-argument considered: "No counter-argument; it stands as written."
   > Resolution: kept in MVP.
 
+### S-02 Search Contract
+
+- Taxonomy remains open and user-extensible. Users can select an existing taxonomy value from autocomplete or create a new value; equivalent casing must not create a second taxonomy record.
+- Autocomplete applies to taxonomy. Ingredient search uses a regular text input with debounce; ingredient autocomplete is deferred until ingredients have a dedicated data model.
+- When both taxonomy and ingredient filters are provided, results must satisfy both conditions (AND). A query with only one filter applies only that filter.
+- Ingredient matching is performed against the current `recipes.ingredients` text field after trimming the query and uses case-insensitive substring matching. For example, `kur` matches `kurczak`.
+- A valid query with no matches returns an empty result set and an explicit empty state; it is not treated as a server error and must not be replaced with approximate matches.
+- Search edge cases include empty or whitespace-only input, casing differences, partial ingredient fragments, a single supplied filter, both filters with no intersection, and a valid query with no results.
+
 ## Non-Functional Requirements
 
 - Użytkownik widzi pierwsze wyniki wyszukiwania w <= 1.5 s dla 95% zapytań.

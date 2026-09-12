@@ -19,7 +19,7 @@ The first rollout must bootstrap a test runner because the project currently has
 | R3  | A user can read or modify a recipe or taxonomy relation belonging to another account.                                        | High   | Medium     | PRD Access Control; F-01 implementation plan   |
 | R4  | Client and server validation diverge, allowing invalid or excessive data into the database.                                  | Medium | Medium     | PRD FR-001, FR-003; S-01 implementation plan   |
 | R5  | Recipe-taxonomy changes leave orphaned or invalid relations after an edge-case operation.                                    | Medium | Medium     | F-01 implementation plan: relation integrity   |
-| R6  | Search by taxonomy and ingredient returns recipes that do not satisfy all query conditions.                                  | High   | Medium     | PRD US-01, FR-004; roadmap S-02                |
+| R6  | Search by taxonomy and ingredient returns recipes that do not satisfy all query conditions, or handles text and empty-result edge cases inconsistently. | High   | Medium     | PRD US-01, FR-004, S-02 Search Contract; roadmap S-02 |
 
 ### Risk Response Guidance
 
@@ -30,7 +30,7 @@ The first rollout must bootstrap a test runner because the project currently has
 | R3   | Account A cannot read or modify account B's recipe data or relations.                                         | Being logged in is sufficient authorization.                    | Ownership predicate, RLS behavior, request identity, and relation access path.                       | Database integration                       | Testing only one authenticated account.                           |
 | R4   | The server rejects missing, malformed, and unexpected input independently of client-side validation.          | Form validation protects the API.                               | Server schema, normalization, accepted fields, error contract, and persistence constraints.          | API contract/integration                   | Copying implementation logic into expected test values.           |
 | R5   | Edge-case relation operations preserve referential and uniqueness guarantees.                                 | A successful insert proves the model is consistent.             | Foreign keys, delete behavior, duplicate relation behavior, and domain error mapping.                | Database integration                       | Asserting only that a row exists.                                 |
-| R6   | A result satisfies every supplied taxonomy and ingredient condition and exposes the expected result contract. | Text similarity implies relevance.                              | Query semantics, AND/OR rules, ingredient representation, ordering, and independent fixture oracle.  | Service/API integration, then selected e2e | E2e tests without an independent expected-result source.          |
+| R6   | A result satisfies every supplied taxonomy and ingredient condition, uses the defined text matching rules, and exposes the expected empty-result contract. | Text similarity implies relevance. | Query semantics, AND/OR rules, open taxonomy behavior, ingredient text representation, trimming, case-insensitivity, empty results, ordering, and independent fixture oracle. | Service/API integration, then selected e2e | E2e tests without an independent expected-result source, or approximate fallback results that hide a broken AND filter. |
 
 ## 3. Phased Rollout
 
@@ -42,6 +42,18 @@ The first rollout must bootstrap a test runner because the project currently has
 | 4   | Quality gates                            | Make critical tests part of local and CI quality gates.                                         | R1-R6         | Test runner, lint, build, critical-flow checks | not started   | —                                      |
 
 Phase order is risk-first: protect ownership and database integrity, then verify writes and deduplication, then verify the product's north-star search flow, and finally make the checks enforceable. No AI-native phase is proposed because the current risks have cheaper deterministic signals.
+
+### Phase 3 edge cases
+
+The search correctness rollout must cover these cases:
+
+- taxonomy-only query returns only recipes with the selected taxonomy;
+- ingredient-only query matches a non-empty fragment case-insensitively after trimming;
+- taxonomy plus ingredient returns only the intersection of both filters;
+- a query with no intersection returns a successful empty result, not an error or approximate match;
+- empty or whitespace-only ingredient input does not create a restrictive ingredient predicate;
+- equivalent taxonomy casing resolves to the same taxonomy value and does not create a duplicate option;
+- ingredient autocomplete is out of scope for this rollout; tests cover the text input and result filtering instead.
 
 ## 4. Stack
 
@@ -74,7 +86,7 @@ Phase order is risk-first: protect ownership and database integrity, then verify
 - Recipe ownership and relation integrity: Add tests in `src/lib/services/__tests__/recipe.service.integration.test.ts`, using `createTestContext()` from `src/lib/services/__tests__/helpers.ts` for two authenticated users and cleanup. Run with `npm run test:run` after starting local Supabase and setting `SUPABASE_URL`, `SUPABASE_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`.
 - Recipe persistence and partial tag assignment: TBD — see §3 Phase 2.
 - Canonical taxonomy creation and duplicate prevention: TBD — see §3 Phase 2.
-- Search by combined taxonomy and ingredient conditions: TBD — see §3 Phase 3.
+- Search by combined taxonomy and ingredient conditions, text matching, and empty-result behavior: TBD — see §3 Phase 3 and the Phase 3 edge-case list.
 - Running critical tests with lint and build: TBD — see §3 Phase 4.
 
 ## 7. Negative Space

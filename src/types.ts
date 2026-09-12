@@ -50,3 +50,9 @@ export interface AssignTaxonomyInput {
   recipeId: UUID;
   taxonomyId: UUID;
 }
+
+export interface SearchRecipesInput {
+  ingredient?: string;
+  taxonomyIds?: UUID[];
+  limit?: number;
+}

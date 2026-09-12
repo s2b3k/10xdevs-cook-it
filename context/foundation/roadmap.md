@@ -3,7 +3,7 @@ project: cook.it
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-09-12
 prd_version: 1
 main_goal: speed
 top_blocker: capacity
@@ -31,9 +31,9 @@ W tym roadmapie najpierw dostarczamy walidacyjny punkt produktu, czyli najmniejs
 
 | ID   | Change ID                               | Outcome (user can ...)                                                                                       | Prerequisites | PRD refs                                                                | Status   |
 | ---- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------- | ----------------------------------------------------------------------- | -------- |
-| F-01 | recipe-domain-foundation                | (foundation) aplikacja ma minimalny model przepisu, taksonomii i wlasciciela danych gotowy pod przeplywy MVP | -             | Access Control, FR-001, FR-003                                          | ready    |
-| S-01 | add-recipe-with-taxonomy                | user can add a recipe recznie lub copy-paste i zapisac podstawowe metadane taksonomiczne                     | F-01          | FR-001, FR-003, Success Criteria (Primary)                              | proposed |
-| S-02 | search-recipes-autocomplete-and-details | user can wyszukac przepis po taksonomii i skladniku, zobaczyc karty wynikow i otworzyc pelny widok           | S-01          | US-01, FR-004, FR-005, Non-Functional Requirements (search <= 1.5s p95) | proposed |
+| F-01 | recipe-domain-foundation                | (foundation) aplikacja ma minimalny model przepisu, taksonomii i wlasciciela danych gotowy pod przeplywy MVP | -             | Access Control, FR-001, FR-003                                          | done     |
+| S-01 | add-recipe-with-taxonomy                | user can add a recipe recznie lub copy-paste i zapisac podstawowe metadane taksonomiczne                     | F-01          | FR-001, FR-003, Success Criteria (Primary)                              | done     |
+| S-02 | search-recipes-autocomplete-and-details | user can wyszukac przepis po taksonomii i skladniku, zobaczyc karty wynikow i otworzyc pelny widok           | S-01          | US-01, FR-004, FR-005, Non-Functional Requirements (search <= 1.5s p95) | done       |
 | S-03 | edit-and-delete-recipe                  | user can edytowac i usuwac istniejace przepisy bez utraty kontroli nad wlasna baza                           | S-01          | FR-002                                                                  | proposed |
 
 ## Streams
@@ -70,7 +70,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** -
 - **Unknowns:** -
 - **Risk:** Bez tego fundamentu latwo rozjechac zakres i wprowadzic niespojnosci, ktore spowolnia kolejne pionowe dostawy.
-- **Status:** ready
+- **Status:** done
 
 ## Slices
 
@@ -84,7 +84,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** -
 - **Unknowns:** -
 - **Risk:** Jesli ten slice bedzie zbyt rozbudowany, presja czasu przeniesie opoznienie na caly lancuch walidacji.
-- **Status:** proposed
+- **Status:** done
 
 ### S-02: Wyszukiwanie z autocomplete, karty wynikow i szczegoly
 
@@ -96,8 +96,10 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** -
 - **Unknowns:**
   - Ktora metryka ma byc glowna do oceny pierwszych 2 tygodni: dodane przepisy na uzytkownika czy skutecznosc klikniec w top-3? - Owner: user. Block: no.
+- **Search contract:** taxonomy pozostaje otwarta i user-extensible; autocomplete dotyczy taxonomy, a skladnik jest wpisywany w zwyklym polu wyszukiwania. Filtr taxonomy i filtr skladnika lacza sie jako AND. Skladnik jest dopasowywany po niepustym fragmencie tekstu, case-insensitive, po trimowaniu zapytania. Brak dopasowan zwraca jawny pusty stan, nie blad.
+- **Deferred:** osobny byt skladnika, normalizacja skladnikow i autocomplete skladnikow sa poza S-02 i pozostaja kandydatem do zmiany po zamknieciu obecnej roadmapy.
 - **Risk:** To north star, wiec zbyt pozne dostarczenie opozni walidacje, czy produkt realnie skraca decyzje o posilku.
-- **Status:** proposed
+- **Status:** done
 
 ### S-03: Edycja i usuwanie przepisu
 
@@ -123,7 +125,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 ## Open Roadmap Questions
 
 1. **Ktora metryka ma priorytet na starcie MVP: "dodane przepisy na uzytkownika" czy "klikniecia w top-3 wynikow"?** - Owner: user. Block: roadmap-wide.
-2. **Czy startowa taksonomia ma byc zamknieta (minimalny slownik), czy od razu otwarta na szeroka swobode etykiet?** - Owner: user. Block: S-02.
+2. **Startowa taksonomia pozostaje otwarta (user-extensible), z deduplikacja bez rozrozniania wielkosci liter.** - Decision: accepted for S-02. Block: resolved.
 
 ## Parked
 
@@ -136,4 +138,6 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 ## Done
 
-(Empty on first generation. `/10x-archive` appends an entry here - and flips that item's `Status` to `done` - when a change whose `Change ID` matches the item is archived. Do NOT pre-populate.)
+- **S-01: user can dodac przepis recznie lub copy-paste i zapisac podstawowe metadane potrzebne do pozniejszego wyszukiwania.** — Archived 2026-09-12 → `context/archive/2026-05-26-add-recipe-with-taxonomy/`. Lesson: —.
+- **F-01: (foundation) model przepisu, metadanych taksonomicznych i wlasciciela danych jest spojny i gotowy do uzycia przez kolejne przeplywy.** — Archived 2026-09-12 → `context/archive/2026-05-26-recipe-domain-foundation/`. Lesson: —.
+- **S-02: user can wyszukac przepis po taksonomii i skladniku, zobaczyc karty wynikow i otworzyc pelny widok** — Archived 2026-09-12 → `context/archive/2026-09-12-search-recipes-autocomplete-and-details/`. Lesson: —.

@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { CreateRecipeInput, Recipe, UpdateRecipeInput, UUID } from "@/types";
+import type { CreateRecipeInput, Recipe, SearchRecipesInput, Taxonomy, UpdateRecipeInput, UUID } from "@/types";
 import { RECIPE_ERROR_CODES, RecipeDomainError, mapSupabaseError } from "@/lib/services/recipe.errors";
 
 interface RecipeRow {
@@ -12,6 +12,20 @@ interface RecipeRow {
   photo_url: string | null;
   created_at: string;
   updated_at: string;
+}
+
+interface RecipeTaxonomyRow {
+  recipe_id: string;
+  taxonomy_id: string;
+}
+
+interface RecipeTaxonomyWithTaxonomyRow {
+  taxonomy: {
+    id: string;
+    name: string;
+    category: string | null;
+    created_at: string;
+  } | null;
 }
 
 function toRecipe(row: RecipeRow): Recipe {
@@ -49,6 +63,9 @@ function normalizeRequiredText(value: string, fieldName: string): string {
 export interface RecipeService {
   createRecipe(input: CreateRecipeInput): Promise<Recipe>;
   listRecipes(): Promise<Recipe[]>;
+  searchRecipes(input?: SearchRecipesInput): Promise<Recipe[]>;
+  getRecipe(recipeId: UUID): Promise<Recipe>;
+  listTaxonomiesForRecipe(recipeId: UUID): Promise<Taxonomy[]>;
   updateRecipe(recipeId: UUID, input: UpdateRecipeInput): Promise<Recipe>;
   deleteRecipe(recipeId: UUID): Promise<void>;
   assignTaxonomy(recipeId: UUID, taxonomyId: UUID): Promise<void>;
@@ -97,6 +114,115 @@ export function createRecipeService(supabase: SupabaseClient, userId: UUID): Rec
     }
 
     return data.map(toRecipe);
+  }
+
+  async function searchRecipes(input: SearchRecipesInput = {}): Promise<Recipe[]> {
+    const ingredient = input.ingredient?.trim() ?? undefined;
+    const taxonomyIds = [...new Set(input.taxonomyIds ?? [])];
+    const limit = input.limit ?? 20;
+
+    let matchingRecipeIds: string[] | undefined;
+    if (taxonomyIds.length > 0) {
+      const { data: relations, error: relationError } = await supabase
+        .from("recipe_taxonomy")
+        .select("recipe_id, taxonomy_id")
+        .in("taxonomy_id", taxonomyIds)
+        .overrideTypes<RecipeTaxonomyRow[], { merge: false }>();
+
+      if (relationError) {
+        throw (
+          mapSupabaseError(relationError, RECIPE_ERROR_CODES.unknown) ??
+          new RecipeDomainError(RECIPE_ERROR_CODES.unknown, relationError.message, relationError)
+        );
+      }
+
+      const taxonomyCountByRecipe = new Map<string, Set<string>>();
+      for (const relation of relations) {
+        const recipeTaxonomies = taxonomyCountByRecipe.get(relation.recipe_id) ?? new Set<string>();
+        recipeTaxonomies.add(relation.taxonomy_id);
+        taxonomyCountByRecipe.set(relation.recipe_id, recipeTaxonomies);
+      }
+
+      matchingRecipeIds = [...taxonomyCountByRecipe.entries()]
+        .filter(([, recipeTaxonomies]) => taxonomyIds.every((taxonomyId) => recipeTaxonomies.has(taxonomyId)))
+        .map(([recipeId]) => recipeId);
+
+      if (matchingRecipeIds.length === 0) {
+        return [];
+      }
+    }
+
+    let query = supabase
+      .from("recipes")
+      .select("id, user_id, title, lead, ingredients, instructions, photo_url, created_at, updated_at")
+      .eq("user_id", userId);
+
+    if (matchingRecipeIds) {
+      query = query.in("id", matchingRecipeIds);
+    }
+    if (ingredient) {
+      query = query.ilike("ingredients", `%${ingredient}%`);
+    }
+
+    const { data, error } = await query
+      .order("created_at", { ascending: false })
+      .limit(limit)
+      .overrideTypes<RecipeRow[], { merge: false }>();
+
+    if (error) {
+      throw (
+        mapSupabaseError(error, RECIPE_ERROR_CODES.unknown) ??
+        new RecipeDomainError(RECIPE_ERROR_CODES.unknown, error.message, error)
+      );
+    }
+
+    return data.map(toRecipe);
+  }
+
+  async function getRecipe(recipeId: UUID): Promise<Recipe> {
+    const { data, error } = await supabase
+      .from("recipes")
+      .select("id, user_id, title, lead, ingredients, instructions, photo_url, created_at, updated_at")
+      .eq("id", recipeId)
+      .eq("user_id", userId)
+      .single<RecipeRow>();
+
+    if (error) {
+      throw (
+        mapSupabaseError(error, RECIPE_ERROR_CODES.notFound) ??
+        new RecipeDomainError(RECIPE_ERROR_CODES.notFound, error.message, error)
+      );
+    }
+
+    return toRecipe(data);
+  }
+
+  async function listTaxonomiesForRecipe(recipeId: UUID): Promise<Taxonomy[]> {
+    const { data, error } = await supabase
+      .from("recipe_taxonomy")
+      .select("taxonomy(id, name, category, created_at)")
+      .eq("recipe_id", recipeId)
+      .overrideTypes<RecipeTaxonomyWithTaxonomyRow[], { merge: false }>();
+
+    if (error) {
+      throw (
+        mapSupabaseError(error, RECIPE_ERROR_CODES.unknown) ??
+        new RecipeDomainError(RECIPE_ERROR_CODES.unknown, error.message, error)
+      );
+    }
+
+    return data.flatMap(({ taxonomy }) =>
+      taxonomy
+        ? [
+            {
+              id: taxonomy.id,
+              name: taxonomy.name,
+              category: taxonomy.category,
+              createdAt: taxonomy.created_at,
+            },
+          ]
+        : [],
+    );
   }
 
   async function updateRecipe(recipeId: UUID, input: UpdateRecipeInput): Promise<Recipe> {
@@ -165,6 +291,9 @@ export function createRecipeService(supabase: SupabaseClient, userId: UUID): Rec
   return {
     createRecipe,
     listRecipes,
+    searchRecipes,
+    getRecipe,
+    listTaxonomiesForRecipe,
     updateRecipe,
     deleteRecipe,
     assignTaxonomy,

@@ -1,10 +1,10 @@
 ---
 change_id: testing-foundation-and-data-protection
 title: Test foundation and data protection
-status: impl_reviewed
+status: archived
 created: 2026-09-10
-updated: 2026-09-10
-archived_at: null
+updated: 2026-09-12
+archived_at: 2026-09-12T14:35:52Z
 ---
 
 ## Notes
