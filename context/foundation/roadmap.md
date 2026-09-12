@@ -33,7 +33,7 @@ W tym roadmapie najpierw dostarczamy walidacyjny punkt produktu, czyli najmniejs
 | ---- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------- | ----------------------------------------------------------------------- | -------- |
 | F-01 | recipe-domain-foundation                | (foundation) aplikacja ma minimalny model przepisu, taksonomii i wlasciciela danych gotowy pod przeplywy MVP | -             | Access Control, FR-001, FR-003                                          | ready    |
 | S-01 | add-recipe-with-taxonomy                | user can add a recipe recznie lub copy-paste i zapisac podstawowe metadane taksonomiczne                     | F-01          | FR-001, FR-003, Success Criteria (Primary)                              | proposed |
-| S-02 | search-recipes-autocomplete-and-details | user can wyszukac przepis po taksonomii i skladniku, zobaczyc karty wynikow i otworzyc pelny widok           | S-01          | US-01, FR-004, FR-005, Non-Functional Requirements (search <= 1.5s p95) | in-progress |
+| S-02 | search-recipes-autocomplete-and-details | user can wyszukac przepis po taksonomii i skladniku, zobaczyc karty wynikow i otworzyc pelny widok           | S-01          | US-01, FR-004, FR-005, Non-Functional Requirements (search <= 1.5s p95) | done       |
 | S-03 | edit-and-delete-recipe                  | user can edytowac i usuwac istniejace przepisy bez utraty kontroli nad wlasna baza                           | S-01          | FR-002                                                                  | proposed |
 
 ## Streams
@@ -99,7 +99,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Search contract:** taxonomy pozostaje otwarta i user-extensible; autocomplete dotyczy taxonomy, a skladnik jest wpisywany w zwyklym polu wyszukiwania. Filtr taxonomy i filtr skladnika lacza sie jako AND. Skladnik jest dopasowywany po niepustym fragmencie tekstu, case-insensitive, po trimowaniu zapytania. Brak dopasowan zwraca jawny pusty stan, nie blad.
 - **Deferred:** osobny byt skladnika, normalizacja skladnikow i autocomplete skladnikow sa poza S-02 i pozostaja kandydatem do zmiany po zamknieciu obecnej roadmapy.
 - **Risk:** To north star, wiec zbyt pozne dostarczenie opozni walidacje, czy produkt realnie skraca decyzje o posilku.
-- **Status:** in-progress
+- **Status:** done
 
 ### S-03: Edycja i usuwanie przepisu
 
@@ -138,4 +138,4 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 ## Done
 
-(Empty on first generation. `/10x-archive` appends an entry here - and flips that item's `Status` to `done` - when a change whose `Change ID` matches the item is archived. Do NOT pre-populate.)
+- **S-02: user can wyszukac przepis po taksonomii i skladniku, zobaczyc karty wynikow i otworzyc pelny widok** — Archived 2026-09-12 → `context/archive/2026-09-12-search-recipes-autocomplete-and-details/`. Lesson: —.
