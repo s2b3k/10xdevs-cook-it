@@ -26,6 +26,7 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
       </p>
       <a
         href={`/recipes/${recipe.id}`}
+        aria-label={`Open recipe ${recipe.title}`}
         className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-blue-200 transition-colors hover:text-white"
       >
         Open recipe
