@@ -1,10 +1,10 @@
 ---
 change_id: edit-and-delete-recipe
 title: Edit and delete recipe
-status: impl_reviewed
+status: archived
 created: 2026-09-12
 updated: 2026-09-12
-archived_at: null
+archived_at: 2026-09-12T20:02:59Z
 ---
 
 ## Notes
