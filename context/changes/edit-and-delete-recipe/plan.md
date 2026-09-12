@@ -288,27 +288,27 @@ Add one forward migration for the transactional recipe update function. It is re
 
 #### Automated
 
-- [x] 2.1 API tests cover authentication, validation, strict IDs, not-found, success, and failure mappings
-- [x] 2.2 `npm run typecheck` passes for schema and route changes
-- [x] 2.3 `npm run lint` passes for schema and route changes
-- [x] 2.4 `npm run build` succeeds with the mutation route
+- [x] 2.1 API tests cover authentication, validation, strict IDs, not-found, success, and failure mappings — a289756
+- [x] 2.2 `npm run typecheck` passes for schema and route changes — a289756
+- [x] 2.3 `npm run lint` passes for schema and route changes — a289756
+- [x] 2.4 `npm run build` succeeds with the mutation route — a289756
 
 #### Manual
 
-- [x] 2.5 PATCH and DELETE responses are verified manually
+- [x] 2.5 PATCH and DELETE responses are verified manually — a289756
 
 ### Phase 3: Edit and Delete User Experience
 
 #### Automated
 
-- [ ] 3.1 `npm run typecheck` passes for edit UI changes
-- [ ] 3.2 `npm run lint` passes for edit UI changes
-- [ ] 3.3 `npm run build` succeeds with the edit route
+- [x] 3.1 `npm run typecheck` passes for edit UI changes
+- [x] 3.2 `npm run lint` passes for edit UI changes
+- [x] 3.3 `npm run build` succeeds with the edit route
 
 #### Manual
 
-- [ ] 3.4 Edit, tag replacement, cancel, and failed-save states are verified
-- [ ] 3.5 Delete confirmation, cancel, failure, and redirect are verified
+- [x] 3.4 Edit, tag replacement, cancel, and failed-save states are verified
+- [x] 3.5 Delete confirmation, cancel, failure, and redirect are verified
 
 ### Phase 4: End-to-End Verification and Handoff
 
