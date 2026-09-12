@@ -302,15 +302,15 @@ No migration is expected for the selected MVP approach. The existing recipes and
 
 #### Automated
 
-- [x] 2.1 `npm run typecheck` passes after UI and detail route changes
-- [x] 2.2 `npm run lint` passes for Phase 2 files
-- [x] 2.3 `npm run build` succeeds with the dynamic SSR route
+- [x] 2.1 `npm run typecheck` passes after UI and detail route changes — dcdf285
+- [x] 2.2 `npm run lint` passes for Phase 2 files — dcdf285
+- [x] 2.3 `npm run build` succeeds with the dynamic SSR route — dcdf285
 
 #### Manual
 
-- [x] 2.4 Search controls, debounce, loading, empty, error, and clear states are verified in the browser
-- [x] 2.5 Search result navigation and complete recipe details are verified in the browser
-- [x] 2.6 Missing or inaccessible recipe details show the intended controlled state
+- [x] 2.4 Search controls, debounce, loading, empty, error, and clear states are verified in the browser — dcdf285
+- [x] 2.5 Search result navigation and complete recipe details are verified in the browser — dcdf285
+- [x] 2.6 Missing or inaccessible recipe details show the intended controlled state — dcdf285
 
 ### Phase 3: Integration, E2E, and Performance Verification
 
