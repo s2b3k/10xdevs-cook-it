@@ -1,10 +1,10 @@
 ---
 change_id: testing-recipe-persistence-and-tag-deduplication
 title: Recipe persistence and tag deduplication
-status: impl_reviewed
+status: archived
 created: 2026-09-12
 updated: 2026-09-13
-archived_at: null
+archived_at: 2026-09-12T22:54:50Z
 ---
 
 ## Notes
