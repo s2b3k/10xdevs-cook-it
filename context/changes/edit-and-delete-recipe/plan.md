@@ -301,14 +301,14 @@ Add one forward migration for the transactional recipe update function. It is re
 
 #### Automated
 
-- [x] 3.1 `npm run typecheck` passes for edit UI changes
-- [x] 3.2 `npm run lint` passes for edit UI changes
-- [x] 3.3 `npm run build` succeeds with the edit route
+- [x] 3.1 `npm run typecheck` passes for edit UI changes — a129ec7
+- [x] 3.2 `npm run lint` passes for edit UI changes — a129ec7
+- [x] 3.3 `npm run build` succeeds with the edit route — a129ec7
 
 #### Manual
 
-- [x] 3.4 Edit, tag replacement, cancel, and failed-save states are verified
-- [x] 3.5 Delete confirmation, cancel, failure, and redirect are verified
+- [x] 3.4 Edit, tag replacement, cancel, and failed-save states are verified — a129ec7
+- [x] 3.5 Delete confirmation, cancel, failure, and redirect are verified — a129ec7
 
 ### Phase 4: End-to-End Verification and Handoff
 
