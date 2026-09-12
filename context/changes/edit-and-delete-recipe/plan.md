@@ -314,14 +314,14 @@ Add one forward migration for the transactional recipe update function. It is re
 
 #### Automated
 
-- [ ] 4.1 `npx astro sync` succeeds
-- [ ] 4.2 `npm run typecheck` succeeds
-- [ ] 4.3 `npm run lint` succeeds
-- [ ] 4.4 `npm run test:run` succeeds with local Supabase
-- [ ] 4.5 `npm run build` succeeds
-- [ ] 4.6 Focused Playwright edit/delete flow passes with cleanup
+- [x] 4.1 `npx astro sync` succeeds
+- [x] 4.2 `npm run typecheck` succeeds
+- [x] 4.3 `npm run lint` succeeds
+- [x] 4.4 `npm run test:run` succeeds with hosted Supabase
+- [x] 4.5 `npm run build` succeeds
+- [x] 4.6 Focused Playwright edit/delete flow passes with cleanup
 
 #### Manual
 
-- [ ] 4.7 Full authenticated edit/delete workflow is verified
-- [ ] 4.8 Cross-account access remains blocked
+- [x] 4.7 Full authenticated edit/delete workflow is verified
+- [x] 4.8 Cross-account access remains blocked
