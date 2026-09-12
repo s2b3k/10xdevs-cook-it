@@ -316,15 +316,15 @@ No migration is expected for the selected MVP approach. The existing recipes and
 
 #### Automated
 
-- [x] 3.1 `npx astro sync` succeeds
-- [x] 3.2 `npm run typecheck` succeeds
-- [x] 3.3 `npm run lint` succeeds
-- [x] 3.4 `npm run test:run` succeeds with local Supabase
-- [x] 3.5 `npm run build` succeeds
-- [x] 3.6 Selected Playwright search-to-detail scenario passes
+- [x] 3.1 `npx astro sync` succeeds — 4a50a7c
+- [x] 3.2 `npm run typecheck` succeeds — 4a50a7c
+- [x] 3.3 `npm run lint` succeeds — 4a50a7c
+- [x] 3.4 `npm run test:run` succeeds with local Supabase — 4a50a7c
+- [x] 3.5 `npm run build` succeeds — 4a50a7c
+- [x] 3.6 Selected Playwright search-to-detail scenario passes — 4a50a7c
 
 #### Manual
 
-- [x] 3.7 Full search semantics and empty/error distinction are verified
-- [x] 3.8 Detail ownership boundary and content completeness are verified
-- [x] 3.9 Representative search timing meets the p95 <= 1.5s target
+- [x] 3.7 Full search semantics and empty/error distinction are verified — 4a50a7c
+- [x] 3.8 Detail ownership boundary and content completeness are verified — 4a50a7c
+- [x] 3.9 Representative search timing meets the p95 <= 1.5s target — 4a50a7c
