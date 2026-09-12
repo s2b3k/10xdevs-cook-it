@@ -196,21 +196,21 @@ No database migration is required. The change narrows API acceptance by rejectin
 
 #### Automated
 
-- [x] 1.1 Add strict, normalized write-schema and taxonomy-assignment route tests
-- [x] 1.2 Run npm run typecheck
-- [x] 1.3 Run npm run lint
+- [x] 1.1 Add strict, normalized write-schema and taxonomy-assignment route tests — 15d31f9
+- [x] 1.2 Run npm run typecheck — 15d31f9
+- [x] 1.3 Run npm run lint — 15d31f9
 
 #### Manual
 
-- [x] 1.4 Confirm successful assignment preserves normal recipe-list redirect
+- [x] 1.4 Confirm successful assignment preserves normal recipe-list redirect — 15d31f9
 
 ### Phase 2: Prove Canonical Taxonomy Persistence
 
 #### Automated
 
-- [ ] 2.1 Run focused taxonomy service integration test
-- [ ] 2.2 Assert equivalent taxonomy writes return one ID and one database row
-- [ ] 2.3 Run npm run typecheck
+- [x] 2.1 Run focused taxonomy service integration test
+- [x] 2.2 Assert equivalent taxonomy writes return one ID and one database row
+- [x] 2.3 Run npm run typecheck
 
 #### Manual
 
