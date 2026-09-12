@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase";
 import { createRecipeService } from "@/lib/services/recipe.service";
 import { RECIPE_ERROR_CODES, RecipeDomainError } from "@/lib/services/recipe.errors";
 import type { Recipe, Taxonomy } from "@/types";
+import { z } from "zod";
 
 const { user } = Astro.locals;
 const recipeId = Astro.params.id;
@@ -16,7 +17,7 @@ let taxonomies: Taxonomy[] = [];
 let errorMessage: string | null = null;
 let notFound = false;
 
-if (!recipeId || !service || !/^[0-9a-f-]{36}$/i.test(recipeId)) {
+if (!recipeId || !service || !z.uuid().safeParse(recipeId).success) {
   notFound = true;
 } else {
   try {

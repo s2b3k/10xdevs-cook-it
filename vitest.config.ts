@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
   return {
     test: {
       environment: "node",
-      include: ["src/lib/services/__tests__/**/*.integration.test.ts"],
+      include: ["src/lib/services/__tests__/**/*.integration.test.ts", "src/pages/api/**/*.integration.test.ts"],
       testTimeout: 30_000,
       hookTimeout: 30_000,
       sequence: { concurrent: false },
