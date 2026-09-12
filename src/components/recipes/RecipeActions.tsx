@@ -50,6 +50,7 @@ export default function RecipeActions({ recipeId }: RecipeActionsProps) {
             disabled={deleting}
             onClick={() => {
               setConfirming(false);
+              setError(null);
             }}
           >
             Cancel
@@ -83,6 +84,7 @@ export default function RecipeActions({ recipeId }: RecipeActionsProps) {
         className={actionButtonClass}
         onClick={() => {
           setConfirming(true);
+          setError(null);
         }}
       >
         <Trash2 className="size-4" />

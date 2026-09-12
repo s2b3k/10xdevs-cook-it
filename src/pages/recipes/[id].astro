@@ -43,6 +43,10 @@ if (!recipeId || !service || !z.uuid().safeParse(recipeId).success) {
         Back to recipes
       </a>
 
+      <div class:list={["mb-6", !recipe && "hidden"]}>
+        <RecipeActions client:load recipeId={recipeId ?? ""} />
+      </div>
+
       {
         notFound ? (
           <div class="rounded-2xl border border-dashed border-white/15 bg-white/5 p-8 text-center">
@@ -71,9 +75,6 @@ if (!recipeId || !service || !z.uuid().safeParse(recipeId).success) {
                   ))}
                 </div>
               ) : null}
-              <div class="mt-6">
-                <RecipeActions client:load recipeId={recipe.id} />
-              </div>
             </header>
 
             {recipe.photoUrl ? (

@@ -1,7 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Topbar from "@/components/Topbar.astro";
-import EditRecipeForm from "@/components/recipes/EditRecipeForm";
+import EditRecipeIsland from "@/components/recipes/EditRecipeIsland";
 import { createClient } from "@/lib/supabase";
 import { createRecipeService } from "@/lib/services/recipe.service";
 import { RECIPE_ERROR_CODES, RecipeDomainError } from "@/lib/services/recipe.errors";
@@ -39,6 +39,25 @@ if (!recipeId || !service || !z.uuid().safeParse(recipeId).success) {
     <div class="mx-auto max-w-3xl">
       <Topbar />
 
+      <div
+        class:list={[
+          "rounded-3xl border border-white/10 bg-white/8 p-6 shadow-2xl backdrop-blur-sm md:p-8",
+          !recipe && "hidden",
+        ]}
+      >
+        <a
+          href={recipe ? `/recipes/${recipe.id}` : "/recipes"}
+          class="text-sm text-blue-100/60 transition-colors hover:text-white hover:underline"
+        >
+          Back to recipe
+        </a>
+        <p class="mt-8 text-sm tracking-[0.3em] text-blue-200/60 uppercase">Edit recipe</p>
+        <h1 class="mt-2 text-3xl font-semibold text-white">Keep this one worth cooking again</h1>
+        <div class="mt-8">
+          <EditRecipeIsland client:load recipe={recipe} taxonomies={taxonomies} />
+        </div>
+      </div>
+
       {
         notFound ? (
           <div class="rounded-2xl border border-dashed border-white/15 bg-white/5 p-8 text-center">
@@ -51,20 +70,6 @@ if (!recipeId || !service || !z.uuid().safeParse(recipeId).success) {
           <div class="rounded-2xl border border-red-300/20 bg-red-500/10 p-8 text-center text-red-100">
             <h1 class="text-2xl font-semibold">Recipe unavailable</h1>
             <p class="mx-auto mt-3 max-w-lg text-sm leading-6">{errorMessage}</p>
-          </div>
-        ) : recipe ? (
-          <div class="rounded-3xl border border-white/10 bg-white/8 p-6 shadow-2xl backdrop-blur-sm md:p-8">
-            <a
-              href={`/recipes/${recipe.id}`}
-              class="text-sm text-blue-100/60 transition-colors hover:text-white hover:underline"
-            >
-              Back to recipe
-            </a>
-            <p class="mt-8 text-sm tracking-[0.3em] text-blue-200/60 uppercase">Edit recipe</p>
-            <h1 class="mt-2 text-3xl font-semibold text-white">Keep this one worth cooking again</h1>
-            <div class="mt-8">
-              <EditRecipeForm client:load recipe={recipe} taxonomies={taxonomies} />
-            </div>
           </div>
         ) : null
       }
