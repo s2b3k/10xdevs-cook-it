@@ -41,6 +41,15 @@ export interface UpdateRecipeInput {
   photoUrl?: string | null;
 }
 
+export interface UpdateRecipeWithTaxonomyInput {
+  title: string;
+  lead: string | null;
+  ingredients: string;
+  instructions: string;
+  photoUrl: string | null;
+  taxonomyIds: UUID[];
+}
+
 export interface CreateTaxonomyInput {
   name: string;
   category?: string | null;

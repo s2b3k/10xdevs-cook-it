@@ -42,7 +42,7 @@ const recipes = user && supabase ? await createRecipeService(supabase, user.id).
         ) : null
       }
 
-      {(<RecipeSearch client:load initialRecipes={recipes} />)}
+      <RecipeSearch client:load initialRecipes={recipes} />
     </div>
   </div>
 </Layout>

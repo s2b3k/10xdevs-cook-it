@@ -35,7 +35,9 @@ describe("recipe service data isolation", () => {
     await expect(otherAccount.updateRecipe(recipe.id, { title: "Unauthorized title" })).rejects.toMatchObject({
       code: RECIPE_ERROR_CODES.notFound,
     });
-    await otherAccount.deleteRecipe(recipe.id);
+    await expect(otherAccount.deleteRecipe(recipe.id)).rejects.toMatchObject({
+      code: RECIPE_ERROR_CODES.notFound,
+    });
 
     const { data, error } = await context.admin
       .from("recipes")
@@ -46,6 +48,65 @@ describe("recipe service data isolation", () => {
     expect(error).toBeNull();
     expect(data).toMatchObject({ id: recipe.id, title: "Original title", user_id: context.users[0].id });
     await expect(owner.listRecipes()).resolves.toContainEqual(expect.objectContaining({ title: "Original title" }));
+  });
+
+  it("updates recipe fields and replaces taxonomy relations atomically", async () => {
+    context = await createTestContext();
+    const owner = createRecipeService(context.users[0].client, context.users[0].id);
+    const otherAccount = createRecipeService(context.users[1].client, context.users[1].id);
+    const recipe = await context.createRecipe(context.users[0], { title: "Original title" });
+    const retainedTaxonomy = await context.createTaxonomy(context.users[0], `Retained ${randomUUID()}`);
+    const removedTaxonomy = await context.createTaxonomy(context.users[0], `Removed ${randomUUID()}`);
+    const addedTaxonomy = await context.createTaxonomy(context.users[0], `Added ${randomUUID()}`);
+    await context.assignTaxonomy(context.users[0], recipe.id, retainedTaxonomy.id);
+    await context.assignTaxonomy(context.users[0], recipe.id, removedTaxonomy.id);
+
+    const updated = await owner.updateRecipeWithTaxonomy(recipe.id, {
+      title: "Updated title",
+      lead: "Updated lead",
+      ingredients: "Updated ingredients",
+      instructions: "Updated instructions",
+      photoUrl: "https://example.com/updated.jpg",
+      taxonomyIds: [retainedTaxonomy.id, addedTaxonomy.id, addedTaxonomy.id],
+    });
+
+    expect(updated).toMatchObject({
+      id: recipe.id,
+      title: "Updated title",
+      lead: "Updated lead",
+      ingredients: "Updated ingredients",
+      instructions: "Updated instructions",
+      photoUrl: "https://example.com/updated.jpg",
+    });
+    await expect(owner.listTaxonomiesForRecipe(recipe.id)).resolves.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: retainedTaxonomy.id }),
+        expect.objectContaining({ id: addedTaxonomy.id }),
+      ]),
+    );
+    await expect(owner.listTaxonomiesForRecipe(recipe.id)).resolves.not.toContainEqual(
+      expect.objectContaining({ id: removedTaxonomy.id }),
+    );
+
+    await owner.updateRecipeWithTaxonomy(recipe.id, {
+      title: "Updated title",
+      lead: null,
+      ingredients: "Updated ingredients",
+      instructions: "Updated instructions",
+      photoUrl: null,
+      taxonomyIds: [],
+    });
+    await expect(owner.listTaxonomiesForRecipe(recipe.id)).resolves.toEqual([]);
+    await expect(
+      otherAccount.updateRecipeWithTaxonomy(recipe.id, {
+        title: "Unauthorized title",
+        lead: null,
+        ingredients: "Ingredients",
+        instructions: "Instructions",
+        photoUrl: null,
+        taxonomyIds: [],
+      }),
+    ).rejects.toMatchObject({ code: RECIPE_ERROR_CODES.notFound });
   });
 
   it("prevents another account from assigning or removing a recipe relation", async () => {

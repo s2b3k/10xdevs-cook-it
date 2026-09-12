@@ -17,6 +17,15 @@ export const AssignTaxonomyBodySchema = z.object({
   taxonomyId: z.uuid("taxonomyId must be a valid UUID"),
 });
 
+export const UpdateRecipeBodySchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  lead: z.string().nullable(),
+  ingredients: z.string().min(1, "Ingredients are required"),
+  instructions: z.string().min(1, "Instructions are required"),
+  photoUrl: z.string().nullable(),
+  taxonomyIds: z.array(z.uuid("taxonomyId must be a valid UUID")),
+});
+
 export const SearchRecipesQuerySchema = z.object({
   ingredient: z.string().trim().optional(),
   taxonomyIds: z.array(z.uuid("taxonomyId must be a valid UUID")).default([]),

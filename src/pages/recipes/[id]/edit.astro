@@ -1,7 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Topbar from "@/components/Topbar.astro";
-import RecipeActions from "@/components/recipes/RecipeActions";
+import EditRecipeIsland from "@/components/recipes/EditRecipeIsland";
 import { createClient } from "@/lib/supabase";
 import { createRecipeService } from "@/lib/services/recipe.service";
 import { RECIPE_ERROR_CODES, RecipeDomainError } from "@/lib/services/recipe.errors";
@@ -34,17 +34,28 @@ if (!recipeId || !service || !z.uuid().safeParse(recipeId).success) {
 }
 ---
 
-<Layout title={recipe?.title ?? "Recipe not found"}>
+<Layout title={recipe ? `Edit ${recipe.title}` : "Edit recipe"}>
   <div class="bg-cosmic min-h-screen px-4 py-6 text-white">
-    <div class="mx-auto max-w-4xl">
+    <div class="mx-auto max-w-3xl">
       <Topbar />
 
-      <a href="/recipes" class="mb-8 inline-flex text-sm text-blue-200/70 transition-colors hover:text-white">
-        Back to recipes
-      </a>
-
-      <div class:list={["mb-6", !recipe && "hidden"]}>
-        <RecipeActions client:load recipeId={recipeId ?? ""} />
+      <div
+        class:list={[
+          "rounded-3xl border border-white/10 bg-white/8 p-6 shadow-2xl backdrop-blur-sm md:p-8",
+          !recipe && "hidden",
+        ]}
+      >
+        <a
+          href={recipe ? `/recipes/${recipe.id}` : "/recipes"}
+          class="text-sm text-blue-100/60 transition-colors hover:text-white hover:underline"
+        >
+          Back to recipe
+        </a>
+        <p class="mt-8 text-sm tracking-[0.3em] text-blue-200/60 uppercase">Edit recipe</p>
+        <h1 class="mt-2 text-3xl font-semibold text-white">Keep this one worth cooking again</h1>
+        <div class="mt-8">
+          <EditRecipeIsland client:load recipe={recipe} taxonomies={taxonomies} />
+        </div>
       </div>
 
       {
@@ -60,38 +71,6 @@ if (!recipeId || !service || !z.uuid().safeParse(recipeId).success) {
             <h1 class="text-2xl font-semibold">Recipe unavailable</h1>
             <p class="mx-auto mt-3 max-w-lg text-sm leading-6">{errorMessage}</p>
           </div>
-        ) : recipe ? (
-          <article class="space-y-8">
-            <header class="border-b border-white/10 pb-8">
-              <p class="text-sm tracking-[0.3em] text-blue-200/60 uppercase">Recipe</p>
-              <h1 class="mt-3 text-4xl font-semibold text-white">{recipe.title}</h1>
-              {recipe.lead ? <p class="mt-4 max-w-2xl text-lg leading-8 text-blue-100/70">{recipe.lead}</p> : null}
-              {taxonomies.length > 0 ? (
-                <div class="mt-5 flex flex-wrap gap-2">
-                  {taxonomies.map((taxonomy) => (
-                    <span class="rounded-full border border-blue-200/20 bg-blue-200/10 px-3 py-1 text-sm text-blue-100">
-                      {taxonomy.name}
-                    </span>
-                  ))}
-                </div>
-              ) : null}
-            </header>
-
-            {recipe.photoUrl ? (
-              <img src={recipe.photoUrl} alt="" class="max-h-[30rem] w-full rounded-2xl object-cover" />
-            ) : null}
-
-            <div class="grid gap-8 md:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
-              <section>
-                <h2 class="text-xl font-semibold">Ingredients</h2>
-                <p class="mt-4 text-sm leading-7 whitespace-pre-line text-blue-100/75">{recipe.ingredients}</p>
-              </section>
-              <section>
-                <h2 class="text-xl font-semibold">Instructions</h2>
-                <p class="mt-4 text-sm leading-7 whitespace-pre-line text-blue-100/75">{recipe.instructions}</p>
-              </section>
-            </div>
-          </article>
         ) : null
       }
     </div>

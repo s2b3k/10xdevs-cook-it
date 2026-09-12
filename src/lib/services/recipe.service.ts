@@ -1,5 +1,13 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { CreateRecipeInput, Recipe, SearchRecipesInput, Taxonomy, UpdateRecipeInput, UUID } from "@/types";
+import type {
+  CreateRecipeInput,
+  Recipe,
+  SearchRecipesInput,
+  Taxonomy,
+  UpdateRecipeInput,
+  UpdateRecipeWithTaxonomyInput,
+  UUID,
+} from "@/types";
 import { RECIPE_ERROR_CODES, RecipeDomainError, mapSupabaseError } from "@/lib/services/recipe.errors";
 
 interface RecipeRow {
@@ -67,6 +75,7 @@ export interface RecipeService {
   getRecipe(recipeId: UUID): Promise<Recipe>;
   listTaxonomiesForRecipe(recipeId: UUID): Promise<Taxonomy[]>;
   updateRecipe(recipeId: UUID, input: UpdateRecipeInput): Promise<Recipe>;
+  updateRecipeWithTaxonomy(recipeId: UUID, input: UpdateRecipeWithTaxonomyInput): Promise<Recipe>;
   deleteRecipe(recipeId: UUID): Promise<void>;
   assignTaxonomy(recipeId: UUID, taxonomyId: UUID): Promise<void>;
 }
@@ -267,7 +276,13 @@ export function createRecipeService(supabase: SupabaseClient, userId: UUID): Rec
   }
 
   async function deleteRecipe(recipeId: UUID): Promise<void> {
-    const { error } = await supabase.from("recipes").delete().eq("id", recipeId).eq("user_id", userId);
+    const { error } = await supabase
+      .from("recipes")
+      .delete()
+      .eq("id", recipeId)
+      .eq("user_id", userId)
+      .select("id")
+      .single<{ id: string }>();
 
     if (error) {
       throw (
@@ -275,6 +290,29 @@ export function createRecipeService(supabase: SupabaseClient, userId: UUID): Rec
         new RecipeDomainError(RECIPE_ERROR_CODES.notFound, error.message, error)
       );
     }
+  }
+
+  async function updateRecipeWithTaxonomy(recipeId: UUID, input: UpdateRecipeWithTaxonomyInput): Promise<Recipe> {
+    const { data, error } = await supabase
+      .rpc("update_recipe_with_taxonomy", {
+        p_recipe_id: recipeId,
+        p_title: normalizeRequiredText(input.title, "title"),
+        p_lead: normalizeOptionalText(input.lead),
+        p_ingredients: normalizeRequiredText(input.ingredients, "ingredients"),
+        p_instructions: normalizeRequiredText(input.instructions, "instructions"),
+        p_photo_url: normalizeOptionalText(input.photoUrl),
+        p_taxonomy_ids: [...new Set(input.taxonomyIds)],
+      })
+      .single<RecipeRow>();
+
+    if (error) {
+      throw (
+        mapSupabaseError(error, RECIPE_ERROR_CODES.notFound) ??
+        new RecipeDomainError(RECIPE_ERROR_CODES.notFound, error.message, error)
+      );
+    }
+
+    return toRecipe(data);
   }
 
   async function assignTaxonomy(recipeId: UUID, taxonomyId: UUID): Promise<void> {
@@ -295,6 +333,7 @@ export function createRecipeService(supabase: SupabaseClient, userId: UUID): Rec
     getRecipe,
     listTaxonomiesForRecipe,
     updateRecipe,
+    updateRecipeWithTaxonomy,
     deleteRecipe,
     assignTaxonomy,
   };
