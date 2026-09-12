@@ -2,6 +2,18 @@ import { randomUUID } from "node:crypto";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { CreateRecipeInput, Taxonomy, UUID } from "@/types";
 
+interface RecipeRpcRow {
+  id: UUID;
+  user_id: UUID;
+  title: string;
+  lead: string | null;
+  ingredients: string;
+  instructions: string;
+  photo_url: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 interface TestDatabase {
   public: {
     Tables: {
@@ -32,7 +44,20 @@ interface TestDatabase {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      update_recipe_with_taxonomy: {
+        Args: {
+          p_recipe_id: UUID;
+          p_title: string;
+          p_lead: string | null;
+          p_ingredients: string;
+          p_instructions: string;
+          p_photo_url: string | null;
+          p_taxonomy_ids: UUID[];
+        };
+        Returns: RecipeRpcRow;
+      };
+    };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
   };

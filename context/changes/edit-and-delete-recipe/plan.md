@@ -275,14 +275,14 @@ Add one forward migration for the transactional recipe update function. It is re
 
 #### Automated
 
-- [ ] 1.1 Migration applies and the transactional function is callable
-- [ ] 1.2 Integration tests cover field edits, tag replacement, empty tags, ownership, and delete cascade
-- [ ] 1.3 `npm run typecheck` passes for persistence changes
-- [ ] 1.4 `npm run lint` passes for persistence changes
+- [x] 1.1 Migration applies and the transactional function is callable
+- [x] 1.2 Integration tests cover field edits, tag replacement, empty tags, ownership, and delete cascade
+- [x] 1.3 `npm run typecheck` passes for persistence changes
+- [x] 1.4 `npm run lint` passes for persistence changes
 
 #### Manual
 
-- [ ] 1.5 Transaction and shared-taxonomy preservation are reviewed
+- [x] 1.5 Transaction and shared-taxonomy preservation are reviewed
 
 ### Phase 2: Recipe Mutation API
 
