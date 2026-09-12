@@ -1,175 +1,143 @@
-# 10x Astro Starter
+# cook.it
 
-![](./public/template.png)
-
-A modern, opinionated starter template for building fast, accessible web applications.
+cook.it is a server-rendered recipe library for saving, finding, editing, and deleting your own recipes. Recipes support user-defined taxonomy tags and can be searched by tags, ingredients, or both.
 
 ## Tech Stack
 
-- [Astro](https://astro.build/) v6 - Modern web framework with server-first rendering
-- [React](https://react.dev/) v19 - UI library for interactive components
-- [TypeScript](https://www.typescriptlang.org/) v5 - Type-safe JavaScript
-- [Tailwind CSS](https://tailwindcss.com/) v4 - Utility-first CSS framework
-- [Supabase](https://supabase.com/) - Authentication and backend-as-a-service
-- [Cloudflare Workers](https://workers.cloudflare.com/) - Edge deployment runtime
+- [Astro](https://astro.build/) 6 with SSR
+- [React](https://react.dev/) 19 islands for interactive forms and search
+- [TypeScript](https://www.typescriptlang.org/) 5
+- [Tailwind CSS](https://tailwindcss.com/) 4
+- [Supabase](https://supabase.com/) for authentication and PostgreSQL
+- [Cloudflare Workers](https://workers.cloudflare.com/) for deployment
 
 ## Prerequisites
 
-- Node.js v22.14.0 (as specified in `.nvmrc`)
-- npm (comes with Node.js)
+- Node.js 22.14.0 (see `.nvmrc`)
+- npm
+- Docker Desktop for a local Supabase instance
 
 ## Getting Started
 
-1. Clone the repository:
-
-```bash
-git clone https://github.com/przeprogramowani/10x-astro-starter.git
-cd 10x-astro-starter
-```
-
-2. Install dependencies:
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-3. Set up Supabase and configure environment variables — see [Supabase Configuration](#supabase-configuration) below.
-
-4. Create a `.dev.vars` file for local Cloudflare dev secrets:
-
-```bash
-cp .env.example .dev.vars
-```
-
-5. Run the development server:
-
-```bash
-npm run dev
-```
-
-## Available Scripts
-
-- `npm run dev` - Start development server (Cloudflare workerd runtime)
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint with type-checked rules
-- `npm run lint:fix` - Auto-fix ESLint issues
-- `npm run format` - Run Prettier
-
-## Project Structure
-
-```md
-.
-├── src/
-│ ├── layouts/ # Astro layouts
-│ ├── pages/ # Astro pages
-│ │ └── api/ # API endpoints
-│ ├── components/ # UI components (Astro & React)
-│ └── assets/ # Static assets
-├── public/ # Public assets
-├── wrangler.jsonc # Cloudflare Workers config
-```
-
-## Supabase Configuration
-
-This project uses [Supabase](https://supabase.com/) for authentication. Environment variables are declared via Astro's `astro:env` schema and are treated as **server-only secrets** — they are never exposed to the client.
-
-### First-time setup (local, no cloud project needed)
-
-Requires [Docker](https://www.docker.com/) and ~7 GB RAM.
-
-1. Create your `.env` file:
+Create local environment files:
 
 ```bash
 cp .env.example .env
+cp .env.example .dev.vars
 ```
 
-2. Initialize the local Supabase project (creates a `supabase/` config folder):
-
-```bash
-npx supabase init
-```
-
-3. Start the local stack (downloads Docker images on first run):
+Start Supabase. The first run downloads the local Docker images:
 
 ```bash
 npx supabase start
 ```
 
-4. Copy the credentials printed by the CLI into your `.env` and `.dev.vars`:
+Copy the `API URL` and `anon key` printed by the CLI into both `.env` and `.dev.vars`:
 
-```
+```dotenv
 SUPABASE_URL=http://127.0.0.1:54321
-SUPABASE_KEY=<anon key from CLI output>
+SUPABASE_KEY=<anon-key-from-supabase-start>
 ```
 
-5. To stop the stack when done:
+Apply the database migrations:
+
+```bash
+npx supabase db reset
+```
+
+Run the app at [http://localhost:4321](http://localhost:4321):
+
+```bash
+npm run dev
+```
+
+Local Supabase Studio is available at [http://localhost:54323](http://localhost:54323).
+
+## Application Routes
+
+| Route                 | Purpose                               |
+| --------------------- | ------------------------------------- |
+| `/`                   | Landing page                          |
+| `/auth/signup`        | Create an account                     |
+| `/auth/signin`        | Sign in                               |
+| `/auth/confirm-email` | Email confirmation guidance           |
+| `/recipes`            | Search and browse owned recipes       |
+| `/recipes/new`        | Add a recipe with taxonomy tags       |
+| `/recipes/:id`        | View, edit, or delete an owned recipe |
+| `/recipes/:id/edit`   | Edit recipe content and replace tags  |
+
+All recipe data is scoped to the authenticated user through the service layer and Supabase row-level security policies.
+
+## Supabase
+
+The schema is defined in `supabase/migrations/` and includes recipes, taxonomy values, recipe-taxonomy relations, indexes, RLS policies, and the transactional recipe update function.
+
+For a hosted project, set `SUPABASE_URL` and `SUPABASE_KEY` in `.env` and `.dev.vars`, then link and push migrations:
+
+```bash
+npx supabase login
+npx supabase link --project-ref <project-ref>
+npx supabase db push
+```
+
+For local development, email confirmation can be disabled in Supabase Studio under **Authentication > Providers > Email**.
+
+Stop the local stack when finished:
 
 ```bash
 npx supabase stop
 ```
 
-The local Studio UI is available at `http://localhost:54323`.
+## Available Scripts
 
-No database tables or migrations are required — this project uses Supabase Auth's built-in `auth.users` table only.
+| Command             | Purpose                              |
+| ------------------- | ------------------------------------ |
+| `npm run dev`       | Start the Astro development server   |
+| `npm run build`     | Build the Cloudflare SSR application |
+| `npm run preview`   | Preview the production build         |
+| `npm run typecheck` | Run TypeScript checks                |
+| `npm run lint`      | Run ESLint                           |
+| `npm run lint:fix`  | Fix lint issues where possible       |
+| `npm run test:run`  | Run Vitest tests once                |
+| `npm run test`      | Run Vitest in watch mode             |
+| `npm run format`    | Format the repository with Prettier  |
 
-### Using a cloud Supabase project instead
+Playwright browser tests use `http://localhost:4321`, start the dev server automatically, and use the configured `auth.json` storage state:
 
-If you prefer to use a hosted Supabase project, add these variables to your `.env` and `.dev.vars` files:
-
-| Variable       | Description                                                |
-| -------------- | ---------------------------------------------------------- |
-| `SUPABASE_URL` | Project URL from Supabase dashboard → Settings → API       |
-| `SUPABASE_KEY` | `anon` public key from Supabase dashboard → Settings → API |
-
+```bash
+npx playwright test
 ```
-SUPABASE_URL=https://<project-ref>.supabase.co
-SUPABASE_KEY=<anon-key>
+
+## Project Structure
+
+```text
+src/
+	components/       Astro and React UI components
+	layouts/          Shared Astro layouts
+	lib/              Supabase client, schemas, services, and utilities
+	pages/            SSR pages and API routes
+	middleware.ts     Authentication and protected-route handling
+supabase/
+	migrations/       Database schema, RLS policies, and functions
+tests/              Playwright browser tests
+context/            Product, roadmap, and change-management documents
 ```
-
-### Email confirmation in local development
-
-By default Supabase requires email confirmation before a user can sign in. To skip this during local development:
-
-1. Open the Supabase dashboard for your project
-2. Go to **Authentication → Email → Confirm email**
-3. Toggle it **off**
-
-Users can then sign in immediately after sign-up without clicking a confirmation link.
-
-### Auth routes
-
-| Route                 | Description                                                             |
-| --------------------- | ----------------------------------------------------------------------- |
-| `/auth/signin`        | Email/password sign-in form                                             |
-| `/auth/signup`        | Email/password sign-up form                                             |
-| `/auth/confirm-email` | Post-signup "check your inbox" page                                     |
-| `/dashboard`          | Example protected page (redirects to `/auth/signin` if unauthenticated) |
-
-Route protection is handled in `src/middleware.ts`. Add paths to the `PROTECTED_ROUTES` array there to require authentication.
 
 ## Deployment
 
-This project deploys to [Cloudflare Workers](https://workers.cloudflare.com/).
-
-1. Build the project:
+The app targets [Cloudflare Workers](https://workers.cloudflare.com/). Configure `SUPABASE_URL` and `SUPABASE_KEY` as Cloudflare secrets, then build and deploy:
 
 ```bash
 npm run build
-```
-
-2. Deploy with Wrangler:
-
-```bash
 npx wrangler deploy
 ```
 
-Set `SUPABASE_URL` and `SUPABASE_KEY` as secrets in your Cloudflare dashboard or via `npx wrangler secret put`.
-
 ## CI
 
-GitHub Actions runs lint + build on every push and PR to `master`. Configure `SUPABASE_URL` and `SUPABASE_KEY` as repository secrets in GitHub for the build step.
-
-## License
-
-MIT
+GitHub Actions runs dependency installation, Astro sync, lint, and build for pushes and pull requests to `master`. CI requires `SUPABASE_URL` and `SUPABASE_KEY` repository secrets.
