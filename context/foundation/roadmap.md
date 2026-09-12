@@ -96,6 +96,8 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** -
 - **Unknowns:**
   - Ktora metryka ma byc glowna do oceny pierwszych 2 tygodni: dodane przepisy na uzytkownika czy skutecznosc klikniec w top-3? - Owner: user. Block: no.
+- **Search contract:** taxonomy pozostaje otwarta i user-extensible; autocomplete dotyczy taxonomy, a skladnik jest wpisywany w zwyklym polu wyszukiwania. Filtr taxonomy i filtr skladnika lacza sie jako AND. Skladnik jest dopasowywany po niepustym fragmencie tekstu, case-insensitive, po trimowaniu zapytania. Brak dopasowan zwraca jawny pusty stan, nie blad.
+- **Deferred:** osobny byt skladnika, normalizacja skladnikow i autocomplete skladnikow sa poza S-02 i pozostaja kandydatem do zmiany po zamknieciu obecnej roadmapy.
 - **Risk:** To north star, wiec zbyt pozne dostarczenie opozni walidacje, czy produkt realnie skraca decyzje o posilku.
 - **Status:** proposed
 
@@ -123,7 +125,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 ## Open Roadmap Questions
 
 1. **Ktora metryka ma priorytet na starcie MVP: "dodane przepisy na uzytkownika" czy "klikniecia w top-3 wynikow"?** - Owner: user. Block: roadmap-wide.
-2. **Czy startowa taksonomia ma byc zamknieta (minimalny slownik), czy od razu otwarta na szeroka swobode etykiet?** - Owner: user. Block: S-02.
+2. **Startowa taksonomia pozostaje otwarta (user-extensible), z deduplikacja bez rozrozniania wielkosci liter.** - Decision: accepted for S-02. Block: resolved.
 
 ## Parked
 
