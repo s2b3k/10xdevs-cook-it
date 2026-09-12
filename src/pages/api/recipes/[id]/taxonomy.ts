@@ -54,7 +54,18 @@ export const POST: APIRoute = async (context) => {
 
   let body: unknown;
   try {
-    body = await context.request.json();
+    const rawBody = await context.request.text();
+    if (!rawBody) {
+      return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    body = JSON.parse(rawBody);
+    if (typeof body !== "object" || body === null || Array.isArray(body)) {
+      throw new TypeError("Body must be a JSON object");
+    }
   } catch {
     return new Response(JSON.stringify({ error: "Invalid JSON body" }), {
       status: 400,
