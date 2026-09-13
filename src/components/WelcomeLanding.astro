@@ -69,13 +69,29 @@ const { user, recipes, warning } = Astro.props;
           </p>
         </div>
       </div>
+      <div class="scroll-cue flex justify-center pb-8 text-yellow-200/70" aria-hidden="true">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="40"
+          height="40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M12 5v14"></path>
+          <path d="m19 12-7 7-7-7"></path>
+        </svg>
+      </div>
     </div>
   </section>
 
   {
     user ? (
-      <section id="recipe-workspace" class="bg-cosmic px-4 py-16 text-white sm:px-8">
-        <div class="mx-auto max-w-4xl">
+      <section id="recipe-workspace" class="recipe-workspace bg-cosmic px-4 py-16 text-white sm:px-8 lg:min-h-[1300px]">
+        <div class="relative z-10 mx-auto max-w-4xl">
           <RecipeWorkspace recipes={recipes} warning={warning} />
         </div>
       </section>
@@ -85,6 +101,80 @@ const { user, recipes, warning } = Astro.props;
   {!user ? <div class="bg-cosmic h-16" aria-hidden="true" /> : null}
 
   <style>
+    .recipe-workspace {
+      --recipe-halo-progress: 0;
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+    }
+    .scroll-cue {
+      animation: scroll-cue-drift 2.8s ease-in-out infinite;
+    }
+    @keyframes scroll-cue-drift {
+      0%,
+      100% {
+        transform: translateY(0);
+        opacity: 0.55;
+      }
+      50% {
+        transform: translateY(0.4rem);
+        opacity: 0.95;
+      }
+    }
+    .recipe-workspace::before {
+      position: absolute;
+      z-index: 0;
+      top: -4rem;
+      left: 50%;
+      width: min(46rem, 100%);
+      height: 15rem;
+      border-radius: 50%;
+      background: radial-gradient(
+        ellipse at center top,
+        rgb(250 204 21 / calc(var(--recipe-halo-progress) * 0.72)),
+        rgb(245 158 11 / calc(var(--recipe-halo-progress) * 0.28)) 28%,
+        transparent 72%
+      );
+      filter: blur(22px);
+      opacity: var(--recipe-halo-progress);
+      transform: translateX(-50%);
+      transition: opacity 120ms linear;
+      content: "";
+      pointer-events: none;
+    }
+    .recipe-workspace::after {
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 2px;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgb(250 204 21 / 25%) 28%,
+        rgb(253 224 71 / 75%) 50%,
+        rgb(245 158 11 / 25%) 72%,
+        transparent 100%
+      );
+      background-size: 220% 100%;
+      animation: recipe-edge-sheen 12s ease-in-out infinite;
+      content: "";
+      pointer-events: none;
+    }
+    @keyframes recipe-edge-sheen {
+      0%,
+      22% {
+        background-position: 120% 0;
+      }
+      52%,
+      74% {
+        background-position: -20% 0;
+      }
+      100% {
+        background-position: 120% 0;
+      }
+    }
     .star-layer {
       position: absolute;
       inset: -10% 0;
@@ -152,16 +242,56 @@ const { user, recipes, warning } = Astro.props;
         animation: none;
         transform: none;
       }
+      .recipe-workspace::before {
+        display: none;
+      }
+      .recipe-workspace::after {
+        animation: none;
+      }
+      .scroll-cue {
+        animation: none;
+      }
     }
   </style>
 
   <script>
-    const RECIPE_HANDOFF_THRESHOLD = 0.6;
+    const RECIPE_HANDOFF_ROOT_MARGIN_PERCENT = -95;
+    const RECIPE_HANDOFF_APPROACH_LEAD = 0.3;
     const recipeWorkspace = document.querySelector("#recipe-workspace");
-    const handoffRootMargin = `0px 0px -${(1 - RECIPE_HANDOFF_THRESHOLD) * 100}% 0px`;
+    const handoffTriggerViewportRatio = 1 + RECIPE_HANDOFF_ROOT_MARGIN_PERCENT / 100;
+    const handoffRootMargin = `0px 0px ${RECIPE_HANDOFF_ROOT_MARGIN_PERCENT}% 0px`;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
     if (recipeWorkspace && "IntersectionObserver" in window) {
       let hasNavigated = false;
+      let frameRequest = 0;
+
+      const updateHalo = () => {
+        frameRequest = 0;
+        if (hasNavigated || reducedMotion.matches) {
+          return;
+        }
+
+        const viewportHeight = window.innerHeight;
+        const triggerTop = viewportHeight * handoffTriggerViewportRatio;
+        const approachStart = viewportHeight * (1 + RECIPE_HANDOFF_APPROACH_LEAD);
+        const progress = Math.min(
+          1,
+          Math.max(0, (approachStart - recipeWorkspace.getBoundingClientRect().top) / (approachStart - triggerTop)),
+        );
+        recipeWorkspace.style.setProperty("--recipe-halo-progress", progress.toFixed(3));
+      };
+
+      const requestHaloUpdate = () => {
+        if (!frameRequest) {
+          frameRequest = window.requestAnimationFrame(updateHalo);
+        }
+      };
+
+      window.addEventListener("scroll", requestHaloUpdate, { passive: true });
+      window.addEventListener("resize", requestHaloUpdate, { passive: true });
+      updateHalo();
+
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (!entry?.isIntersecting || hasNavigated) {
@@ -170,6 +300,8 @@ const { user, recipes, warning } = Astro.props;
 
           hasNavigated = true;
           observer.disconnect();
+          window.removeEventListener("scroll", requestHaloUpdate);
+          window.removeEventListener("resize", requestHaloUpdate);
           window.location.assign("/recipes");
         },
         { rootMargin: handoffRootMargin, threshold: 0 },

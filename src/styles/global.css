@@ -6,8 +6,8 @@
 :root {
   --radius: 0.625rem;
   --cosmic-star-far: rgb(255 255 255 / 15%);
-  --cosmic-star-mid: rgb(255 255 255 / 10%);
-  --cosmic-star-near: rgb(255 255 255 / 7%);
+  --cosmic-star-mid: rgba(248, 247, 247, 0.404);
+  --cosmic-star-near: rgba(224, 219, 147, 0.397);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
