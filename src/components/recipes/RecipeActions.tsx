@@ -1,5 +1,5 @@
 import { AlertTriangle, Pencil, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ServerError } from "@/components/auth/ServerError";
 import { Button } from "@/components/ui/button";
 
@@ -10,9 +10,19 @@ interface RecipeActionsProps {
 }
 
 export default function RecipeActions({ recipeId }: RecipeActionsProps) {
+  const [hydrated, setHydrated] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      setHydrated(true);
+    });
+    return () => {
+      cancelAnimationFrame(id);
+    };
+  }, []);
 
   async function handleDelete() {
     setDeleting(true);
@@ -33,7 +43,11 @@ export default function RecipeActions({ recipeId }: RecipeActionsProps) {
 
   if (confirming) {
     return (
-      <div className="space-y-3 rounded-xl border border-red-300/25 bg-red-500/10 p-4" role="alert">
+      <div
+        data-hydrated={hydrated}
+        className="space-y-3 rounded-xl border border-red-300/25 bg-red-500/10 p-4"
+        role="alert"
+      >
         <div className="flex items-start gap-3">
           <AlertTriangle className="mt-0.5 size-5 shrink-0 text-red-200" aria-hidden="true" />
           <div>
@@ -65,7 +79,7 @@ export default function RecipeActions({ recipeId }: RecipeActionsProps) {
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div data-hydrated={hydrated} className="flex flex-wrap gap-2">
       <Button
         type="button"
         variant="outline"
