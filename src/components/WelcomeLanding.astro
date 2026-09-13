@@ -15,23 +15,10 @@ const { user, recipes, warning } = Astro.props;
 
 <div class="bg-cosmic w-full text-white">
   <section class="welcome-section relative min-h-screen w-full overflow-clip lg:h-[1500px] lg:min-h-0">
-    <div
-      class="pointer-events-none absolute top-1/4 -left-24 h-[350px] w-[350px] rounded-full bg-purple-500/20 blur-[120px]"
-    >
-    </div>
-    <div
-      class="pointer-events-none absolute top-2/3 -right-16 h-[250px] w-[250px] rounded-full bg-blue-500/15 blur-[100px]"
-    >
-    </div>
-    <div
-      class="pointer-events-none absolute top-0 left-1/2 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-indigo-400/10 blur-[140px]"
-    >
-    </div>
-
-    <div
-      class="star-field pointer-events-none absolute inset-0"
-      style="background-image: radial-gradient(circle, rgba(255,255,255,0.15) 1px, transparent 1px), radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px), radial-gradient(circle, rgba(255,255,255,0.07) 1px, transparent 1px); background-size: 200px 200px, 150px 150px, 100px 100px; background-position: 0 0, 40px 60px, 80px 30px;"
-    >
+    <div class="star-field pointer-events-none absolute inset-0" aria-hidden="true">
+      <div class="star-layer star-layer-far"></div>
+      <div class="star-layer star-layer-mid"></div>
+      <div class="star-layer star-layer-near"></div>
     </div>
 
     <div class="relative z-10 p-4 sm:p-8 lg:sticky lg:top-0">
@@ -98,14 +85,22 @@ const { user, recipes, warning } = Astro.props;
   {!user ? <div class="bg-cosmic h-16" aria-hidden="true" /> : null}
 
   <style>
-    .star-field {
+    .star-layer {
+      position: absolute;
+      inset: -10% 0;
       transform: translate3d(0, 0, 0);
     }
     @supports (animation-timeline: scroll()) {
-      .star-field {
+      .star-layer {
         animation: star-field-drift linear both;
         animation-timeline: scroll(root);
         animation-range: 0% 100%;
+      }
+      .star-layer-mid {
+        animation-name: star-field-drift-mid;
+      }
+      .star-layer-near {
+        animation-name: star-field-drift-near;
       }
     }
     @keyframes star-field-drift {
@@ -116,8 +111,44 @@ const { user, recipes, warning } = Astro.props;
         transform: translate3d(0, 120px, 0);
       }
     }
+    @keyframes star-field-drift-mid {
+      from {
+        transform: translate3d(0, 0, 0);
+      }
+      to {
+        transform: translate3d(0, 80px, 0);
+      }
+    }
+    @keyframes star-field-drift-near {
+      from {
+        transform: translate3d(0, 0, 0);
+      }
+      to {
+        transform: translate3d(0, 45px, 0);
+      }
+    }
+    .star-layer-far {
+      background-image: radial-gradient(circle, var(--cosmic-star-far) 1px, transparent 1px);
+      background-size: 200px 200px;
+      background-position: 0 0;
+    }
+    .star-layer-mid {
+      background-image: radial-gradient(circle, var(--cosmic-star-mid) 1px, transparent 1px);
+      background-size: 150px 150px;
+      background-position: 40px 60px;
+    }
+    .star-layer-near {
+      background-image: radial-gradient(circle, var(--cosmic-star-near) 1px, transparent 1px);
+      background-size: 100px 100px;
+      background-position: 80px 30px;
+    }
+    @media (max-width: 1023px) {
+      .star-layer {
+        inset: 0;
+      }
+    }
     @media (prefers-reduced-motion: reduce) {
-      .star-field {
+      .star-layer {
         animation: none;
         transform: none;
       }

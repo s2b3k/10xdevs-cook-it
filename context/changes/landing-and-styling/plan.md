@@ -228,28 +228,28 @@ No database or data migration is required. Existing route protection, recipe own
 
 #### Automated
 
-- [x] 1.1 `npm run lint` passes for the shared workspace and landing route
-- [x] 1.2 `npm run typecheck` passes
-- [x] 1.3 `npm run build` completes successfully
+- [x] 1.1 `npm run lint` passes for the shared workspace and landing route — f925092
+- [x] 1.2 `npm run typecheck` passes — f925092
+- [x] 1.3 `npm run build` completes successfully — f925092
 
 #### Manual
 
-- [x] 1.4 Public and authenticated landing variants behave correctly
-- [x] 1.5 `/recipes` retains existing workspace behavior
+- [x] 1.4 Public and authenticated landing variants behave correctly — f925092
+- [x] 1.5 `/recipes` retains existing workspace behavior — f925092
 
 ### Phase 2: Add Responsive CSS-First Opener Motion
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` passes for styling changes
-- [ ] 2.2 `npm run typecheck` passes
-- [ ] 2.3 `npm run build` completes successfully
+- [x] 2.1 `npm run lint` passes for styling changes
+- [x] 2.2 `npm run typecheck` passes
+- [x] 2.3 `npm run build` completes successfully
 
 #### Manual
 
-- [ ] 2.4 Desktop parallax remains subtle and scrollable
-- [ ] 2.5 Mobile layout has no overflow or clipped content
-- [ ] 2.6 Reduced-motion and static fallbacks disable motion safely
+- [x] 2.4 Desktop parallax remains subtle and scrollable
+- [x] 2.5 Mobile layout has no overflow or clipped content
+- [x] 2.6 Reduced-motion and static fallbacks disable motion safely
 
 ### Phase 3: Configurable Authenticated Handoff and Final Verification
 
