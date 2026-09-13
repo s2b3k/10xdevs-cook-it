@@ -94,6 +94,7 @@ test("searches by taxonomy and ingredient, then opens complete details", async (
     expect(invalidResponse.status()).toBe(400);
 
     await page.goto("/recipes");
+    await expect(page.locator("[data-hydrated='true']")).toBeVisible();
     const ingredientInput = page.getByRole("searchbox", { name: "Ingredient" });
     await Promise.all([
       page.waitForResponse((response) => {

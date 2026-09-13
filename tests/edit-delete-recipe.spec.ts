@@ -69,14 +69,23 @@ test("edits, cancels, and deletes an owned recipe", async ({ page }) => {
 
   try {
     await page.goto(`/recipes/${recipe.id}`);
+    await expect(page.locator("[data-hydrated='true']").first()).toBeVisible();
     await page.getByRole("button", { name: "Edit recipe" }).click();
     await expect(page).toHaveURL(new RegExp(`/recipes/${recipe.id}/edit$`));
     await expect(page.getByRole("heading", { name: "Keep this one worth cooking again" })).toBeVisible();
+    await expect(page.locator("form[data-hydrated='true']")).toBeVisible();
 
     await page.getByLabel("Title").fill(updatedTitle);
+    await expect(page.getByLabel("Title")).toHaveValue(updatedTitle);
+
     await page.getByLabel("Lead").fill(`Updated lead ${suffix}`);
+    await expect(page.getByLabel("Lead")).toHaveValue(`Updated lead ${suffix}`);
+
     await page.getByLabel("Ingredients").fill(`Updated ingredients ${suffix}`);
+    await expect(page.getByLabel("Ingredients")).toHaveValue(`Updated ingredients ${suffix}`);
+
     await page.getByLabel("Instructions").fill(`Updated instructions ${suffix}`);
+    await expect(page.getByLabel("Instructions")).toHaveValue(`Updated instructions ${suffix}`);
     await page.getByLabel(`Remove ${removedTag.name}`).click();
 
     const taxonomyInput = page.getByLabel("Taxonomy tags");
@@ -85,9 +94,12 @@ test("edits, cancels, and deletes an owned recipe", async ({ page }) => {
       taxonomyInput.fill(addedTag.name),
     ]);
     await page.getByRole("button", { name: addedTag.name, exact: true }).click();
+    await expect(page.getByLabel(`Remove ${addedTag.name}`)).toBeVisible();
+    await expect(page.getByRole("button", { name: addedTag.name, exact: true })).not.toBeVisible();
     await page.getByRole("button", { name: "Save changes" }).click();
 
     await expect(page).toHaveURL(new RegExp(`/recipes/${recipe.id}$`));
+    await expect(page.locator("[data-hydrated='true']").first()).toBeVisible();
     await expect(page.getByRole("heading", { name: updatedTitle })).toBeVisible();
     await expect(page.getByText(`Updated ingredients ${suffix}`)).toBeVisible();
     await expect(page.getByText(retainedTag.name)).toBeVisible();
@@ -95,9 +107,11 @@ test("edits, cancels, and deletes an owned recipe", async ({ page }) => {
     await expect(page.getByText(removedTag.name)).not.toBeVisible();
 
     await page.getByRole("button", { name: "Edit recipe" }).click();
+    await expect(page.locator("form[data-hydrated='true']")).toBeVisible();
     await page.getByLabel("Title").fill("Unsaved title");
     await page.getByRole("link", { name: "Cancel" }).click();
     await expect(page).toHaveURL(new RegExp(`/recipes/${recipe.id}$`));
+    await expect(page.locator("[data-hydrated='true']").first()).toBeVisible();
     await expect(page.getByRole("heading", { name: updatedTitle })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Unsaved title" })).not.toBeVisible();
 

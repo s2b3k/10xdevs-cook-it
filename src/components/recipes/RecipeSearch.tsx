@@ -11,12 +11,22 @@ interface RecipeSearchProps {
 }
 
 export default function RecipeSearch({ initialRecipes }: RecipeSearchProps) {
+  const [hydrated, setHydrated] = useState(false);
   const [selectedTaxonomies, setSelectedTaxonomies] = useState<Taxonomy[]>([]);
   const [ingredient, setIngredient] = useState("");
   const [recipes, setRecipes] = useState(initialRecipes);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const requestId = useRef(0);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      setHydrated(true);
+    });
+    return () => {
+      cancelAnimationFrame(id);
+    };
+  }, []);
 
   const hasFilters = selectedTaxonomies.length > 0 || ingredient.trim().length > 0;
 
@@ -77,7 +87,7 @@ export default function RecipeSearch({ initialRecipes }: RecipeSearchProps) {
   }
 
   return (
-    <section aria-labelledby="recipe-search-heading" className="space-y-6">
+    <section aria-labelledby="recipe-search-heading" data-hydrated={hydrated} className="space-y-6">
       <div className="rounded-2xl border border-white/10 bg-black/10 p-5">
         <div className="mb-5 flex flex-wrap items-start justify-between gap-4">
           <div>

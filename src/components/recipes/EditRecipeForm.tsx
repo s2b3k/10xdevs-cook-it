@@ -1,5 +1,5 @@
 import { BookText, CookingPot, ImageIcon, ListPlus, Sparkles, StickyNote } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormField } from "@/components/auth/FormField";
 import { ServerError } from "@/components/auth/ServerError";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ interface EditRecipeFormProps {
 }
 
 export default function EditRecipeForm({ recipe, taxonomies }: EditRecipeFormProps) {
+  const [hydrated, setHydrated] = useState(false);
   const [title, setTitle] = useState(recipe.title);
   const [lead, setLead] = useState(recipe.lead ?? "");
   const [ingredients, setIngredients] = useState(recipe.ingredients);
@@ -27,6 +28,15 @@ export default function EditRecipeForm({ recipe, taxonomies }: EditRecipeFormPro
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [serverError, setServerError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      setHydrated(true);
+    });
+    return () => {
+      cancelAnimationFrame(id);
+    };
+  }, []);
 
   function clearError(field: keyof FieldErrors) {
     if (fieldErrors[field]) {
@@ -85,7 +95,7 @@ export default function EditRecipeForm({ recipe, taxonomies }: EditRecipeFormPro
   }
 
   return (
-    <form className="space-y-5" onSubmit={handleSubmit} noValidate>
+    <form data-hydrated={hydrated} className="space-y-5" onSubmit={handleSubmit} noValidate>
       <FormField
         id="title"
         label="Title"
