@@ -167,14 +167,14 @@ Integrate Vitest integration tests and Playwright E2E tests into the main CI pip
 
 #### Automated
 
-- [x] 1.1 `.github/hooks/quality-gates.json` is valid JSON
-- [x] 1.2 ESLint passes cleanly (`npm run lint`)
-- [x] 1.3 Typecheck passes cleanly (`npm run typecheck`)
+- [x] 1.1 `.github/hooks/quality-gates.json` is valid JSON — 6df1c61
+- [x] 1.2 ESLint passes cleanly (`npm run lint`) — 6df1c61
+- [x] 1.3 Typecheck passes cleanly (`npm run typecheck`) — 6df1c61
 
 #### Manual
 
-- [x] 1.4 Agent file edits execute the post-edit lint hook without error
-- [x] 1.5 Guidelines in `AGENTS.md` match current package.json test scripts
+- [x] 1.4 Agent file edits execute the post-edit lint hook without error — 6df1c61
+- [x] 1.5 Guidelines in `AGENTS.md` match current package.json test scripts — 6df1c61
 
 ### Phase 2: Unified CI Enforcement and Test Plan Sync
 
