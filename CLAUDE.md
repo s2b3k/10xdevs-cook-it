@@ -44,11 +44,11 @@ Full server-side rendering (`output: "server"` in astro.config.mjs). All pages a
 ### Environment
 
 - Node.js v22.14.0 (see `.nvmrc`)
-- Env vars: `SUPABASE_URL`, `SUPABASE_KEY` (copy `.env.example` to `.env` for Node, or `.dev.vars` for Cloudflare local dev)
+- Env vars: `SUPABASE_URL`, `SUPABASE_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` for integration and Playwright test cleanup (copy `.env.example` to `.env` for Node, or `.dev.vars` for Cloudflare local dev)
 - Local Supabase: `npx supabase start` (requires Docker)
 - Cloudflare local dev: secrets go in `.dev.vars` (gitignored)
 - Deploy: `npx wrangler deploy` (requires Cloudflare account + `wrangler` auth)
 
 ## CI
 
-GitHub Actions workflow (`.github/workflows/ci.yml`) runs lint + build on every push and PR to master. Requires `SUPABASE_URL` and `SUPABASE_KEY` repository secrets for the build step.
+GitHub Actions workflow (`.github/workflows/ci.yml`) runs lint, Vitest, build, and Playwright on every push and PR to master. Requires `SUPABASE_URL`, `SUPABASE_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` repository secrets.

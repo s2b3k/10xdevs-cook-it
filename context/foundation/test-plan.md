@@ -87,7 +87,7 @@ The search correctness rollout must cover these cases:
 - Recipe persistence and partial tag assignment: `tests/recipe-mutation-api.spec.ts`, covering 4xx validation outcomes, persistence safety, and the warning redirect after partial assignment.
 - Canonical taxonomy creation and duplicate prevention: `src/lib/services/__tests__/taxonomy.service.integration.test.ts`, covering equivalent writes, stable IDs, and unchanged row count against Supabase.
 - Search by combined taxonomy and ingredient conditions, text matching, and empty-result behavior: `tests/search-recipes.spec.ts` and `src/lib/services/recipe.service.ts`, covering the Phase 3 edge-case list through API and selected browser assertions.
-- Running critical tests with lint and build: TBD — see §3 Phase 4.
+- Running critical tests with lint and build: Run `npm run lint`, `npm run typecheck`, `npm run test:run`, and `npm run build`; run `npx playwright test` for browser coverage. These checks are enforced together in `.github/workflows/ci.yml` and require `SUPABASE_URL`, `SUPABASE_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` for integration and Playwright tests.
 
 ## 7. Negative Space
 

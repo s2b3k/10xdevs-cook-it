@@ -46,5 +46,5 @@ This repository is a server-rendered Astro 6 web app with React islands, TypeScr
 
 ## Security and Configuration
 
-- Secrets are required via SUPABASE_URL and SUPABASE_KEY; use .env and .dev.vars locally, never commit real secret values.
+- Secrets are required via SUPABASE_URL and SUPABASE_KEY; integration and Playwright tests also require SUPABASE_SERVICE_ROLE_KEY for fixture cleanup. Use .env and .dev.vars locally, never commit real secret values.
 - Keep Cloudflare and environment behavior aligned with @astro.config.mjs and @wrangler.jsonc.
