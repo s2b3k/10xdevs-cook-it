@@ -255,13 +255,13 @@ No database or data migration is required. Existing route protection, recipe own
 
 #### Automated
 
-- [x] 3.1 `npm run lint` passes
-- [x] 3.2 `npm run typecheck` passes
-- [x] 3.3 `npm run test:run` passes
-- [x] 3.4 `npm run build` completes successfully
+- [x] 3.1 `npm run lint` passes — 79318e4
+- [x] 3.2 `npm run typecheck` passes — 79318e4
+- [x] 3.3 `npm run test:run` passes — 79318e4
+- [x] 3.4 `npm run build` completes successfully — 79318e4
 
 #### Manual
 
-- [x] 3.5 Authenticated threshold redirect fires once at the configured point
-- [x] 3.6 Unauthenticated landing never redirects to `/recipes`
-- [x] 3.7 Back navigation, mobile, and reduced-motion scenarios pass
+- [x] 3.5 Authenticated threshold redirect fires once at the configured point — 79318e4
+- [x] 3.6 Unauthenticated landing never redirects to `/recipes` — 79318e4
+- [x] 3.7 Back navigation, mobile, and reduced-motion scenarios pass — 79318e4
