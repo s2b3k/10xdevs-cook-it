@@ -154,4 +154,28 @@ const { user, recipes, warning } = Astro.props;
       }
     }
   </style>
+
+  <script>
+    const RECIPE_HANDOFF_THRESHOLD = 0.6;
+    const recipeWorkspace = document.querySelector("#recipe-workspace");
+    const handoffRootMargin = `0px 0px -${(1 - RECIPE_HANDOFF_THRESHOLD) * 100}% 0px`;
+
+    if (recipeWorkspace && "IntersectionObserver" in window) {
+      let hasNavigated = false;
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry?.isIntersecting || hasNavigated) {
+            return;
+          }
+
+          hasNavigated = true;
+          observer.disconnect();
+          window.location.assign("/recipes");
+        },
+        { rootMargin: handoffRootMargin, threshold: 0 },
+      );
+
+      observer.observe(recipeWorkspace);
+    }
+  </script>
 </div>

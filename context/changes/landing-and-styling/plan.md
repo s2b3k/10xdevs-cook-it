@@ -241,27 +241,27 @@ No database or data migration is required. Existing route protection, recipe own
 
 #### Automated
 
-- [x] 2.1 `npm run lint` passes for styling changes
-- [x] 2.2 `npm run typecheck` passes
-- [x] 2.3 `npm run build` completes successfully
+- [x] 2.1 `npm run lint` passes for styling changes — 83a13ff
+- [x] 2.2 `npm run typecheck` passes — 83a13ff
+- [x] 2.3 `npm run build` completes successfully — 83a13ff
 
 #### Manual
 
-- [x] 2.4 Desktop parallax remains subtle and scrollable
-- [x] 2.5 Mobile layout has no overflow or clipped content
-- [x] 2.6 Reduced-motion and static fallbacks disable motion safely
+- [x] 2.4 Desktop parallax remains subtle and scrollable — 83a13ff
+- [x] 2.5 Mobile layout has no overflow or clipped content — 83a13ff
+- [x] 2.6 Reduced-motion and static fallbacks disable motion safely — 83a13ff
 
 ### Phase 3: Configurable Authenticated Handoff and Final Verification
 
 #### Automated
 
-- [ ] 3.1 `npm run lint` passes
-- [ ] 3.2 `npm run typecheck` passes
-- [ ] 3.3 `npm run test:run` passes
-- [ ] 3.4 `npm run build` completes successfully
+- [x] 3.1 `npm run lint` passes
+- [x] 3.2 `npm run typecheck` passes
+- [x] 3.3 `npm run test:run` passes
+- [x] 3.4 `npm run build` completes successfully
 
 #### Manual
 
-- [ ] 3.5 Authenticated threshold redirect fires once at the configured point
-- [ ] 3.6 Unauthenticated landing never redirects to `/recipes`
-- [ ] 3.7 Back navigation, mobile, and reduced-motion scenarios pass
+- [x] 3.5 Authenticated threshold redirect fires once at the configured point
+- [x] 3.6 Unauthenticated landing never redirects to `/recipes`
+- [x] 3.7 Back navigation, mobile, and reduced-motion scenarios pass
