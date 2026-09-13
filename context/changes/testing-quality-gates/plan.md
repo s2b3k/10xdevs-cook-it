@@ -180,11 +180,11 @@ Integrate Vitest integration tests and Playwright E2E tests into the main CI pip
 
 #### Automated
 
-- [ ] 2.1 Production build succeeds (`npm run build`)
-- [ ] 2.2 Vitest integration tests pass (`npm run test:run`)
-- [ ] 2.3 Astro sync succeeds (`npx astro sync`)
+- [x] 2.1 Production build succeeds (`npm run build`) — 7cf855b
+- [x] 2.2 Vitest integration tests pass (`npm run test:run`) — 7cf855b
+- [x] 2.3 Astro sync succeeds (`npx astro sync`) — 7cf855b
 
 #### Manual
 
-- [ ] 2.4 GitHub Actions workflow syntax validated
-- [ ] 2.5 `context/foundation/test-plan.md` reflects Phase 4 `complete` status
+- [x] 2.4 GitHub Actions workflow syntax validated — 7cf855b
+- [x] 2.5 `context/foundation/test-plan.md` reflects Phase 4 `complete` status — 7cf855b
