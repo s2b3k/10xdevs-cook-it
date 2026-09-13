@@ -6,11 +6,11 @@ Replace the starter-oriented landing copy with a cook.it opener that keeps the e
 
 ## Current State Analysis
 
-The root route in `src/pages/index.astro` renders `Welcome.astro` inside the shared SSR `Layout.astro`. `Welcome.astro` currently contains all landing structure, cosmic background layers, starter copy, authentication links, and three starter feature cards. `Topbar.astro` already receives `Astro.locals.user` and switches between authenticated and unauthenticated navigation.
+The root route in `src/pages/index.astro` renders `Welcome.astro` inside the shared SSR `Layout.astro`. `Welcome.astro` currently contains all landing structure, cosmic background layers, starter copy, authentication links, and three starter feature cards. `WelcomeLanding.astro` is an existing, currently unused variant that already contains the selected sticky desktop layout and CSS scroll-driven star-field drift. `Topbar.astro` already receives `Astro.locals.user` and switches between authenticated and unauthenticated navigation.
 
 The `/recipes` route independently fetches the signed-in user's recipes server-side and renders the heading, add-recipe action, warning state, and `RecipeSearch` React island. The route is protected by middleware, while the landing route is public. The recipe workspace should not be copied into a second implementation because its search behavior, empty state, and auth assumptions would drift.
 
-There is no existing scroll-driven motion abstraction or reduced-motion rule. The test plan explicitly excludes broad visual snapshot coverage for non-critical marketing pages, so this change needs focused automated checks plus deliberate manual browser verification.
+The existing landing variant provides the first scroll-driven motion implementation and a reduced-motion override, but it is not wired into the root route and does not yet contain the product copy, authenticated recipe workspace, or redirect behavior. The test plan explicitly excludes broad visual snapshot coverage for non-critical marketing pages, so this change needs focused automated checks plus deliberate manual browser verification.
 
 ## Desired End State
 
@@ -20,11 +20,11 @@ When a user is authenticated, the landing page renders the same recipe workspace
 
 ### Key Discoveries:
 
-- `src/pages/index.astro` is a thin SSR route that currently delegates all landing markup to `Welcome.astro`.
+- `src/pages/index.astro` is a thin SSR route that currently delegates all landing markup to `Welcome.astro`; it must switch to the prepared `WelcomeLanding.astro` variant.
 - `src/pages/recipes/index.astro` fetches user-owned recipes server-side and passes them to `RecipeSearch`.
 - `src/middleware.ts` protects `/recipes` and redirects unauthenticated requests to `/auth/signin`.
 - `RecipeSearch.tsx` is already a reusable React island, but its surrounding heading, empty state, and route-level data fetch also need to remain consistent.
-- No existing parallax or `prefers-reduced-motion` implementation exists, so the motion must have an explicit static fallback.
+- `WelcomeLanding.astro` already implements sticky desktop staging, star-field scroll drift, and a `prefers-reduced-motion` fallback; the plan extends and wires this implementation rather than introducing a new motion abstraction.
 
 ## What We're NOT Doing
 
@@ -37,9 +37,9 @@ When a user is authenticated, the landing page renders the same recipe workspace
 
 ## Implementation Approach
 
-Keep the landing route server-rendered and use `Astro.locals.user` as the authority for whether the recipe workspace exists. Move the shared recipe workspace markup into an Astro component that accepts the already-fetched recipe data and warning state; render it from both `Welcome.astro` and `/recipes/index.astro` so both routes retain one structure while their page-level data fetches remain appropriate to each request.
+Keep the landing route server-rendered and use `Astro.locals.user` as the authority for whether the recipe workspace exists. Wire `WelcomeLanding.astro` into the root route and move the shared recipe workspace markup into an Astro component that accepts the already-fetched recipe data and warning state; render it from `WelcomeLanding.astro` and `/recipes/index.astro` so both routes retain one structure while their page-level data fetches remain appropriate to each request.
 
-Keep the parallax implementation CSS-first: preserve server-rendered background layers, add stable data hooks and CSS scroll-driven positioning where supported, and define a static fallback for browsers without scroll-driven CSS and for reduced-motion users. Use a small progressive-enhancement script only for the authenticated redirect trigger, with a named threshold constant and cleanup/guarding so navigation cannot fire repeatedly.
+Keep the selected parallax implementation CSS-first: preserve the existing sticky section, desktop scroll height, and star-field drift in `WelcomeLanding.astro`; add only the smallest stable hooks and responsive refinements needed for the final opener. Define a static fallback for browsers without scroll-driven CSS and for reduced-motion users. Use a small progressive-enhancement script only for the authenticated redirect trigger, with a named threshold constant and cleanup/guarding so navigation cannot fire repeatedly.
 
 ## Critical Implementation Details
 
@@ -71,13 +71,13 @@ Replace starter copy with cook.it-specific content and extract the recipe worksp
 
 **Contract**: Keep the protected route, `Recipes` document title, cosmic page shell, and existing user-visible behavior unchanged.
 
-#### 3. Landing content and route data
+#### 3. Landing component, content, and route data
 
-**Files**: `src/components/Welcome.astro`, `src/pages/index.astro`
+**Files**: `src/components/WelcomeLanding.astro`, `src/pages/index.astro`
 
-**Intent**: Update the public hero headline, supporting copy, labels, and feature content so the page describes cook.it's recipe retrieval and meal-planning value rather than the Astro starter. Make the landing route fetch the authenticated user's recipes only when a valid user and Supabase client are available, then pass them to the shared workspace.
+**Intent**: Make `WelcomeLanding.astro` the active landing component, then update its hero headline, supporting copy, labels, and feature content so the page describes cook.it's recipe retrieval and meal-planning value rather than the Astro starter. Make the landing route fetch the authenticated user's recipes only when a valid user and Supabase client are available, then pass them to the shared workspace.
 
-**Contract**: Unauthenticated requests render the public hero and auth CTAs without recipe data or a recipe section; authenticated requests render the opener followed by `RecipeWorkspace` with that user's recipes.
+**Contract**: `src/pages/index.astro` imports `WelcomeLanding.astro`; unauthenticated requests render the public hero and auth CTAs without recipe data or a recipe section; authenticated requests render the opener followed by `RecipeWorkspace` with that user's recipes. `Welcome.astro` is no longer the active root-route implementation.
 
 ### Success Criteria:
 
@@ -104,19 +104,19 @@ Refine the existing cosmic styling and add layered parallax behavior without tur
 
 ### Changes Required:
 
-#### 1. Cosmic opener styling
+#### 1. Existing cosmic opener baseline
 
-**Files**: `src/components/Welcome.astro`, `src/styles/global.css`
+**Files**: `src/components/WelcomeLanding.astro`, `src/styles/global.css`
 
-**Intent**: Preserve the cosmic direction selected during planning while reducing starter-template noise, improving visual hierarchy, and making the hero-to-recipe transition read as one opener. Keep responsive dimensions stable so text, CTAs, and the recipe section do not shift unexpectedly.
+**Intent**: Preserve the cosmic direction selected during planning while building on the existing sticky layout, `lg:h-[1500px]` desktop scroll stage, and layered star field already present in `WelcomeLanding.astro`. Reduce starter-template noise, improve visual hierarchy, and make the hero-to-recipe transition read as one opener while keeping responsive dimensions stable.
 
-**Contract**: Use existing Tailwind 4 utilities and the `bg-cosmic` theme extension; keep decorative layers pointer-free and keep foreground content above the background layers.
+**Contract**: Use existing Tailwind 4 utilities and the `bg-cosmic` theme extension; keep decorative layers pointer-free and keep foreground content above the background layers. Preserve the current sticky/parallax behavior as the baseline instead of replacing it with a new motion model.
 
 #### 2. Progressive parallax behavior
 
 **Files**: `src/components/Welcome.astro`, `src/styles/global.css`
 
-**Intent**: Add named layer hooks and CSS-first scroll motion for the hero background. Provide a static layout fallback when scroll-driven animation is unavailable, on reduced-motion devices, or under the mobile constraints chosen during implementation.
+**Intent**: Refine the existing star-field scroll animation and layer hooks only where needed for the finished opener. Provide a static layout fallback when scroll-driven animation is unavailable, on reduced-motion devices, or under the mobile constraints chosen during implementation.
 
 **Contract**: The effect must not change document flow, block scrolling, or make content unreadable. Add an explicit `@media (prefers-reduced-motion: reduce)` override that disables motion while retaining all visual layers and content.
 
@@ -211,7 +211,8 @@ No database or data migration is required. Existing route protection, recipe own
 ## References
 
 - Landing route: `src/pages/index.astro`
-- Current landing component: `src/components/Welcome.astro`
+- Current landing component: `src/components/WelcomeLanding.astro` (prepared parallax baseline)
+- Previous starter landing component: `src/components/Welcome.astro`
 - Shared auth navigation: `src/components/Topbar.astro`
 - Existing recipe route: `src/pages/recipes/index.astro`
 - Existing search island: `src/components/recipes/RecipeSearch.tsx`
@@ -227,14 +228,14 @@ No database or data migration is required. Existing route protection, recipe own
 
 #### Automated
 
-- [ ] 1.1 `npm run lint` passes for the shared workspace and landing route
-- [ ] 1.2 `npm run typecheck` passes
-- [ ] 1.3 `npm run build` completes successfully
+- [x] 1.1 `npm run lint` passes for the shared workspace and landing route
+- [x] 1.2 `npm run typecheck` passes
+- [x] 1.3 `npm run build` completes successfully
 
 #### Manual
 
-- [ ] 1.4 Public and authenticated landing variants behave correctly
-- [ ] 1.5 `/recipes` retains existing workspace behavior
+- [x] 1.4 Public and authenticated landing variants behave correctly
+- [x] 1.5 `/recipes` retains existing workspace behavior
 
 ### Phase 2: Add Responsive CSS-First Opener Motion
 

@@ -4,11 +4,11 @@
 
 ## What & Why
 
-The current root page is still an Astro starter landing with cosmic decoration and generic developer copy. This change turns it into a cook.it opener that explains the product clearly, keeps the cosmic direction in a more intentional form, and gives authenticated users a fluid path into their recipe workspace.
+The current root page is still an Astro starter landing with cosmic decoration and generic developer copy. This change turns it into a cook.it opener that explains the product clearly, keeps the cosmic direction in a more intentional form, and gives authenticated users a fluid path into their recipe workspace. The existing `WelcomeLanding.astro` variant already contains the desired sticky/parallax baseline and becomes the active landing implementation.
 
 ## Starting Point
 
-`Welcome.astro` owns the current hero, background, CTA links, and starter feature cards. `/recipes` separately fetches the current user's recipes and renders the complete `RecipeSearch` workspace, protected by middleware. There is no existing parallax or reduced-motion implementation.
+`Welcome.astro` owns the active starter hero, while the unused `WelcomeLanding.astro` already contains the selected sticky desktop stage, star-field scroll drift, and reduced-motion fallback. `/recipes` separately fetches the current user's recipes and renders the complete `RecipeSearch` workspace, protected by middleware.
 
 ## Desired End State
 
@@ -19,10 +19,10 @@ Unauthenticated visitors see a focused cook.it hero with authentication CTAs and
 | Decision | Choice | Why |
 | --- | --- | --- |
 | Landing scope | Opener plus authenticated recipe workspace | Delivers the intended transition without adding unrelated marketing sections |
-| Visual direction | Refined cosmic styling | Preserves the existing direction while making it product-specific and less starter-like |
+| Visual direction | Refined cosmic styling based on `WelcomeLanding.astro` | Preserves the existing direction and desired sticky/parallax behavior while making it product-specific and less starter-like |
 | Authenticated content | Reuse the `/recipes` workspace | Prevents duplicate search behavior and keeps one user-facing contract |
 | Unauthenticated content | Hero only | Avoids empty/private recipe states and protects user data |
-| Motion | CSS-first parallax with static fallback | Keeps SSR lightweight and ensures usable behavior across devices |
+| Motion | Preserve and refine the existing CSS-first parallax in `WelcomeLanding.astro` | Avoids duplicating the already-selected effect while retaining SSR and static fallbacks |
 | Handoff | Automatic navigation at a single configurable threshold, initially 60% | Preserves the desired opener feeling while keeping the trigger easy to tune |
 | Navigation | Ordinary `/recipes` URL navigation | Lets existing middleware and the canonical route remain authoritative |
 
@@ -48,7 +48,7 @@ Unauthenticated visitors see a focused cook.it hero with authentication CTAs and
 
 ## Architecture / Approach
 
-The root SSR route resolves the current user and fetches that user's recipes only when authenticated. A shared Astro recipe workspace component renders the heading, warning, add action, and existing `RecipeSearch` island for both routes. `Welcome.astro` keeps the public hero and conditionally includes the workspace. CSS handles the parallax enhancement and static fallback; a small authenticated-only progressive-enhancement script observes the recipe section and navigates to `/recipes` once the named threshold is reached.
+The root SSR route resolves the current user and fetches that user's recipes only when authenticated. A shared Astro recipe workspace component renders the heading, warning, add action, and existing `RecipeSearch` island for both routes. `WelcomeLanding.astro` becomes the public hero and conditionally includes the workspace. Its existing CSS-first sticky/parallax structure is refined in place with static and reduced-motion fallbacks; a small authenticated-only progressive-enhancement script observes the recipe section and navigates to `/recipes` once the named threshold is reached.
 
 ## Phases at a Glance
 
@@ -64,7 +64,7 @@ The root SSR route resolves the current user and fetches that user's recipes onl
 ## Open Risks & Assumptions
 
 - The authenticated landing section must fetch the same user-owned recipe data server-side rather than calling protected APIs from a public page.
-- CSS scroll-driven effects may be unsupported in some browsers; the static background is the required fallback.
+- CSS scroll-driven effects may be unsupported in some browsers; the static background already present in `WelcomeLanding.astro` is the required fallback.
 - Automatic navigation is intentionally limited to authenticated users and a single named threshold to keep behavior predictable and easy to tune.
 
 ## Success Criteria (Summary)
