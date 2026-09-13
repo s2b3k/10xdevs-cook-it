@@ -15,9 +15,12 @@ This repository is a server-rendered Astro 6 web app with React islands, TypeScr
 - `npm run dev` starts local development.
 - `npm run lint` runs the main code-quality gate.
 - `npm run lint:fix` applies auto-fixes for lint issues.
+- `npm run typecheck` validates the TypeScript project.
 - `npm run build` is the production build check.
 - `npm run preview` verifies the built app locally.
 - `npm run format` applies repository formatting rules.
+- `npm run test` runs Vitest in watch mode.
+- `npm run test:run` runs the Vitest integration suite once.
 
 ## Project Structure and Naming
 
@@ -33,8 +36,8 @@ This repository is a server-rendered Astro 6 web app with React islands, TypeScr
 
 ## Testing and Verification
 
-- No dedicated unit test runner is configured yet; rely on lint + build as the enforced checks.
-- CI in @.github/workflows/ci.yml runs npm ci, astro sync, lint, and build on pushes and PRs to master.
+- Vitest is the project test runner: use `npm run test` for interactive development and `npm run test:run` for a single pass in CI/local verification.
+- CI in @.github/workflows/ci.yml runs npm ci, astro sync, lint, Vitest, and build on pushes and PRs to master.
 
 ## Commit and PR Guidelines
 
@@ -43,5 +46,5 @@ This repository is a server-rendered Astro 6 web app with React islands, TypeScr
 
 ## Security and Configuration
 
-- Secrets are required via SUPABASE_URL and SUPABASE_KEY; use .env and .dev.vars locally, never commit real secret values.
+- Secrets are required via SUPABASE_URL and SUPABASE_KEY; integration and Playwright tests also require SUPABASE_SERVICE_ROLE_KEY for fixture cleanup. Use .env and .dev.vars locally, never commit real secret values.
 - Keep Cloudflare and environment behavior aligned with @astro.config.mjs and @wrangler.jsonc.

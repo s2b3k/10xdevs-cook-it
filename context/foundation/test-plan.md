@@ -36,10 +36,10 @@ The first rollout must bootstrap a test runner because the project currently has
 
 | #   | Phase                                    | Goal                                                                                            | Risks covered | Test types                                     | Status        | Change folder                          |
 | --- | ---------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------- | ---------------------------------------------- | ------------- | -------------------------------------- |
-| 1   | Test foundation and data protection      | Establish the runner and prove data isolation and relation integrity before expanding coverage. | R3, R5        | Integration with Supabase/RLS                  | change opened | testing-foundation-and-data-protection |
-| 2   | Recipe persistence and tag deduplication | Prove reliable recipe persistence, server validation, and canonical tag creation.               | R1, R2, R4    | API/service integration                        | not started   | —                                      |
-| 3   | Search result correctness                | Prove that combined taxonomy and ingredient queries return only valid matches.                  | R6            | Service/API integration; selected e2e          | not started   | —                                      |
-| 4   | Quality gates                            | Make critical tests part of local and CI quality gates.                                         | R1-R6         | Test runner, lint, build, critical-flow checks | not started   | —                                      |
+| 1   | Test foundation and data protection      | Establish the runner and prove data isolation and relation integrity before expanding coverage. | R3, R5        | Integration with Supabase/RLS                  | complete      | testing-foundation-and-data-protection |
+| 2   | Recipe persistence and tag deduplication | Prove reliable recipe persistence, server validation, and canonical tag creation.               | R1, R2, R4    | API/service integration                        | complete      | testing-recipe-persistence-and-tag-deduplication |
+| 3   | Search result correctness                | Prove that combined taxonomy and ingredient queries return only valid matches.                  | R6            | Service/API integration; selected e2e          | complete      | search-recipes-autocomplete-and-details |
+| 4   | Quality gates                            | Make critical tests part of local and CI quality gates.                                         | R1-R6         | Test runner, lint, build, critical-flow checks | complete      | testing-quality-gates                  |
 
 Phase order is risk-first: protect ownership and database integrity, then verify writes and deduplication, then verify the product's north-star search flow, and finally make the checks enforceable. No AI-native phase is proposed because the current risks have cheaper deterministic signals.
 
@@ -84,10 +84,10 @@ The search correctness rollout must cover these cases:
 ## 6. Cookbook
 
 - Recipe ownership and relation integrity: Add tests in `src/lib/services/__tests__/recipe.service.integration.test.ts`, using `createTestContext()` from `src/lib/services/__tests__/helpers.ts` for two authenticated users and cleanup. Run with `npm run test:run` after starting local Supabase and setting `SUPABASE_URL`, `SUPABASE_KEY`, and `SUPABASE_SERVICE_ROLE_KEY`.
-- Recipe persistence and partial tag assignment: TBD — see §3 Phase 2.
-- Canonical taxonomy creation and duplicate prevention: TBD — see §3 Phase 2.
-- Search by combined taxonomy and ingredient conditions, text matching, and empty-result behavior: TBD — see §3 Phase 3 and the Phase 3 edge-case list.
-- Running critical tests with lint and build: TBD — see §3 Phase 4.
+- Recipe persistence and partial tag assignment: `tests/recipe-mutation-api.spec.ts`, covering 4xx validation outcomes, persistence safety, and the warning redirect after partial assignment.
+- Canonical taxonomy creation and duplicate prevention: `src/lib/services/__tests__/taxonomy.service.integration.test.ts`, covering equivalent writes, stable IDs, and unchanged row count against Supabase.
+- Search by combined taxonomy and ingredient conditions, text matching, and empty-result behavior: `tests/search-recipes.spec.ts` and `src/lib/services/recipe.service.ts`, covering the Phase 3 edge-case list through API and selected browser assertions.
+- Running critical tests with lint and build: Run `npm run lint`, `npm run typecheck`, `npm run test:run`, and `npm run build`; run `npx playwright test` for browser coverage. These checks are enforced together in `.github/workflows/ci.yml` and require `SUPABASE_URL`, `SUPABASE_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` for integration and Playwright tests.
 
 ## 7. Negative Space
 
