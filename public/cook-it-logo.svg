@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" fill="none" role="img" aria-labelledby="title">
+  <title id="title">cook.it crossed spoon and spatula logo</title>
+  <defs>
+    <linearGradient id="cook-it-gradient" x1="55" y1="70" x2="345" y2="330" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#bfdbfe"/>
+      <stop offset="0.5" stop-color="#e9d5ff"/>
+      <stop offset="1" stop-color="#fbcfe8"/>
+    </linearGradient>
+  </defs>
+  <circle cx="200" cy="200" r="180" fill="url(#cook-it-gradient)" fill-opacity="0.08" stroke="url(#cook-it-gradient)" stroke-opacity="0.8" stroke-width="12"/>
+  <g transform="translate(0 38)" stroke="url(#cook-it-gradient)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="rotate(-45 130 125)">
+      <ellipse cx="130" cy="125" rx="42" ry="55"/>
+      <path d="M130 180v128"/>
+    </g>
+    <g transform="rotate(45 270 126)">
+      <rect x="235" y="77" width="70" height="88" rx="11"/>
+      <path d="M253 97v48M270 97v48M287 97v48" stroke-width="10"/>
+      <path d="M270 165v143"/>
+    </g>
+  </g>
+</svg>
