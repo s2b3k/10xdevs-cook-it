@@ -164,19 +164,19 @@ Integrate `StatsService` into `src/pages/dashboard.astro` to display recipe and 
 
 #### Automated
 
-- [x] 1.1 Type check passes: `npm run typecheck`
-- [x] 1.2 Linting passes: `npm run lint`
-- [x] 1.3 Stats service integration tests pass: `npm run test:run`
+- [x] 1.1 Type check passes: `npm run typecheck` — fc841af
+- [x] 1.2 Linting passes: `npm run lint` — fc841af
+- [x] 1.3 Stats service integration tests pass: `npm run test:run` — fc841af
 
 ### Phase 2: Dashboard UI Extension
 
 #### Automated
 
-- [ ] 2.1 Type check passes: `npm run typecheck`
-- [ ] 2.2 Linting passes: `npm run lint`
-- [ ] 2.3 Build verification passes: `npm run build`
+- [x] 2.1 Type check passes: `npm run typecheck`
+- [x] 2.2 Linting passes: `npm run lint`
+- [x] 2.3 Build verification passes: `npm run build`
 
 #### Manual
 
-- [ ] 2.4 User logging in to `/dashboard` sees exact recipe count and unique taxonomy count matching their database records.
-- [ ] 2.5 Styling is responsive and matches existing dashboard/cosmic aesthetic.
+- [x] 2.4 User logging in to `/dashboard` sees exact recipe count and unique taxonomy count matching their database records.
+- [x] 2.5 Styling is responsive and matches existing dashboard/cosmic aesthetic.
