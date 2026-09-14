@@ -1,7 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
+import RecipeWorkspace from "@/components/recipes/RecipeWorkspace.astro";
 import Topbar from "@/components/Topbar.astro";
-import RecipeSearch from "@/components/recipes/RecipeSearch";
 import { createClient } from "@/lib/supabase";
 import { createRecipeService } from "@/lib/services/recipe.service";
 
@@ -16,33 +16,7 @@ const recipes = user && supabase ? await createRecipeService(supabase, user.id).
   <div class="bg-cosmic min-h-screen px-4 py-6 text-white">
     <div class="mx-auto max-w-4xl">
       <Topbar />
-
-      <div class="mb-8 flex items-end justify-between gap-4">
-        <div>
-          <p class="text-sm tracking-[0.3em] text-blue-200/60 uppercase">Cookbook</p>
-          <h1 class="mt-2 text-3xl font-semibold text-white">Your recipes</h1>
-          <p class="mt-2 max-w-2xl text-sm text-blue-100/65">
-            Keep the recipes you actually cook close at hand, with just enough context to find them again fast.
-          </p>
-        </div>
-
-        <a
-          href="/recipes/new"
-          class="inline-flex items-center rounded-lg border border-white/15 bg-white/10 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-white/20"
-        >
-          Add recipe
-        </a>
-      </div>
-
-      {
-        warning ? (
-          <div class="mb-6 rounded-xl border border-amber-300/30 bg-amber-500/15 px-4 py-3 text-sm text-amber-100">
-            {warning}
-          </div>
-        ) : null
-      }
-
-      <RecipeSearch client:load initialRecipes={recipes} />
+      <RecipeWorkspace recipes={recipes} warning={warning} />
     </div>
   </div>
 </Layout>

@@ -5,6 +5,9 @@
 
 :root {
   --radius: 0.625rem;
+  --cosmic-star-far: rgb(255 255 255 / 15%);
+  --cosmic-star-mid: rgba(248, 247, 247, 0.404);
+  --cosmic-star-near: rgba(224, 219, 147, 0.397);
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -111,7 +114,10 @@
 }
 
 @utility bg-cosmic {
-  background-image: linear-gradient(to bottom, #0a0e1a, #0f1529, #0a0e1a);
+  background-color: #0a0e1a;
+  background-image:
+    radial-gradient(circle at 50% -20%, rgb(59 130 246 / 14%), transparent 42%),
+    linear-gradient(to bottom, #0a0e1a, #0f1529 48%, #0a0e1a);
 }
 
 @layer base {

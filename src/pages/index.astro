@@ -1,8 +1,15 @@
 ---
-import Welcome from "@/components/Welcome.astro";
+import WelcomeLanding from "@/components/WelcomeLanding.astro";
 import Layout from "@/layouts/Layout.astro";
+import { createClient } from "@/lib/supabase";
+import { createRecipeService } from "@/lib/services/recipe.service";
+
+const { user } = Astro.locals;
+const supabase = user ? createClient(Astro.request.headers, Astro.cookies) : null;
+const warning = Astro.url.searchParams.get("warning");
+const recipes = user && supabase ? await createRecipeService(supabase, user.id).listRecipes() : [];
 ---
 
-<Layout>
-  <Welcome />
+<Layout title="cook.it">
+  <WelcomeLanding user={user} recipes={recipes} warning={warning} />
 </Layout>
