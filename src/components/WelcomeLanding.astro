@@ -24,13 +24,7 @@ const { user, recipes, warning } = Astro.props;
     <div class="relative z-10 p-4 sm:p-8 lg:sticky lg:top-0">
       <Topbar />
       <div class="mx-auto flex max-w-4xl flex-col items-center justify-center px-4 py-24 text-center sm:py-32 lg:py-40">
-        <img
-          src="/cook-it-logo.svg"
-          alt="cook.it"
-          class="mb-8 size-[250px]"
-          width="250"
-          height="250"
-        />
+        <img src="/cook-it-logo.svg" alt="cook.it" class="mb-8 size-[250px]" width="250" height="250" />
         <h1
           class="mb-6 bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 bg-clip-text text-5xl leading-tight font-bold text-transparent sm:text-6xl lg:text-7xl"
         >
@@ -46,13 +40,15 @@ const { user, recipes, warning } = Astro.props;
               <a
                 href="/auth/signin"
                 class="inline-flex items-center justify-center rounded-lg bg-purple-600 px-6 py-3 text-base font-medium text-white transition-colors hover:bg-purple-500"
-                >Sign in</a
               >
+                Sign in
+              </a>
               <a
                 href="/auth/signup"
                 class="inline-flex items-center justify-center rounded-lg border border-white/20 px-6 py-3 text-base font-medium text-white transition-colors hover:bg-white/10"
-                >Sign up</a
               >
+                Sign up
+              </a>
             </div>
           )
         }
@@ -94,8 +90,8 @@ const { user, recipes, warning } = Astro.props;
               stroke-linecap="round"
               stroke-linejoin="round"
             >
-              <path d="M12 5v14"></path>
-              <path d="m19 12-7 7-7-7"></path>
+              <path d="M12 5v14" />
+              <path d="m19 12-7 7-7-7" />
             </svg>
           </div>
         )
@@ -105,7 +101,7 @@ const { user, recipes, warning } = Astro.props;
 
   {
     user ? (
-      <section id="recipe-workspace" class="recipe-workspace bg-cosmic px-4 py-16 text-white sm:px-8 min-h-[1300px]">
+      <section id="recipe-workspace" class="recipe-workspace bg-cosmic min-h-[1300px] px-4 py-16 text-white sm:px-8">
         <div class="relative z-10 mx-auto max-w-4xl">
           <RecipeWorkspace recipes={recipes} warning={warning} />
         </div>
