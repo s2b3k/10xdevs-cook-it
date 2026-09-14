@@ -2,6 +2,10 @@
 
 cook.it is a server-rendered recipe library for saving, finding, editing, and deleting your own recipes. Recipes support user-defined taxonomy tags and can be searched by tags, ingredients, or both.
 
+DEMO ACCOUNT:
+demo@cook.it
+cookit
+
 ## Tech Stack
 
 - [Astro](https://astro.build/) 6 with SSR
