@@ -65,3 +65,8 @@ export interface SearchRecipesInput {
   taxonomyIds?: UUID[];
   limit?: number;
 }
+
+export interface UserStats {
+  recipeCount: number;
+  taxonomyCount: number;
+}
