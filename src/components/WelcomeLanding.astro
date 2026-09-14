@@ -22,7 +22,9 @@ const { user, recipes, warning } = Astro.props;
     </div>
 
     <div class="relative z-10 p-4 sm:p-8 lg:sticky lg:top-0">
-      <Topbar />
+      <div class="mx-auto max-w-4xl">
+        <Topbar />
+      </div>
       <div class="mx-auto flex max-w-4xl flex-col items-center justify-center px-4 py-24 text-center sm:py-32 lg:py-40">
         <img src="/cook-it-logo.svg" alt="cook.it" class="mb-8 size-[250px]" width="250" height="250" />
         <h1
